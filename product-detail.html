@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="page-title">Product · MUHAMEDDISPO</title>
+  <meta name="description" id="page-desc" content="Premium vape product from MUHAMEDDISPO."/>
+  <meta name="theme-color" content="#0a0a0a"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://fujlhixdfdltretlplxl.supabase.co; img-src 'self' https://fujlhixdfdltretlplxl.supabase.co data: blob:; media-src 'self' https://fujlhixdfdltretlplxl.supabase.co blob:; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"
+    integrity="sha256-lid+wA4Z30dtc5aoolhrQe0QM9z2gPWqebDFVgWXkrg="
+    crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" aria-label="Primary navigation">
+  <a href="index.html" class="nav-brand"><img src="Logo.png" alt="MUHAMEDDISPO" class="nav-logo" style="height: 100px; margin-bottom: 12px;" /></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <div style="position:relative;">
+      <button id="nav-products-btn" aria-expanded="false" aria-haspopup="true" style="color:var(--gold);">Products ▾</button>
+      <div class="nav-dropdown" id="nav-dropdown" role="menu">
+        <a href="products.html?group=all-in-one" role="menuitem">All-In-One</a>
+        <a href="products.html?group=cartridges" role="menuitem">Cartridges</a>
+      </div>
+    </div>
+    <a href="index.html#find-us">Find Us</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a href="cart.html" class="nav-cart-btn" aria-label="Shopping cart">
+      🛒 Cart <span class="cart-count" id="cart-count" aria-live="polite"></span>
+    </a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="products.html?group=all-in-one">All-In-One</a>
+  <a href="products.html?group=cartridges">Cartridges</a>
+  <a href="cart.html">Cart</a>
+</div>
+
+<!-- BREADCRUMB -->
+<nav aria-label="Breadcrumb" id="breadcrumb" style="padding:100px 40px 0; max-width:1100px; margin:0 auto;">
+  <ol style="display:flex;gap:8px;align-items:center;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted); list-style:none;">
+    <li><a href="index.html" style="color:var(--text-muted); transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Home</a></li>
+    <li style="color:var(--text-dim);">›</li>
+    <li id="bc-group"><a href="#" style="color:var(--text-muted);"></a></li>
+    <li style="color:var(--text-dim);">›</li>
+    <li id="bc-sub" style="color:var(--text-muted);"></li>
+    <li style="color:var(--text-dim);">›</li>
+    <li id="bc-product" style="color:var(--gold);"></li>
+  </ol>
+</nav>
+
+<!-- MAIN PRODUCT DETAIL -->
+<main id="main" tabindex="-1">
+  <div class="product-detail-wrap" id="product-detail-wrap">
+
+    <!-- LEFT: Image -->
+    <div class="product-detail__img-wrap" id="detail-img-wrap">
+      <div class="skeleton" style="height:460px; border-radius:16px;"></div>
+    </div>
+
+    <!-- RIGHT: Info -->
+    <div id="detail-info">
+      <div class="skeleton" style="height:12px;width:80px;margin-bottom:16px;border-radius:4px;"></div>
+      <div class="skeleton" style="height:56px;width:90%;border-radius:8px;margin-bottom:20px;"></div>
+      <div class="skeleton" style="height:36px;width:120px;border-radius:6px;margin-bottom:24px;"></div>
+      <div class="skeleton" style="height:80px;width:100%;border-radius:8px;margin-bottom:32px;"></div>
+      <div class="skeleton" style="height:52px;width:100%;border-radius:8px;"></div>
+    </div>
+  </div>
+
+  <!-- RELATED PRODUCTS -->
+  <section id="related-section" style="padding:60px 0 80px; border-top:1px solid var(--border); display:none;">
+    <div class="container">
+      <div class="section-label">You Might Also Like</div>
+      <h2 class="section-title" style="margin-bottom:28px;">Related Products</h2>
+    </div>
+    <div class="product-rail" id="related-rail" role="list" style="padding:4px 40px 24px;"></div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand"><img src="Logo.png" alt="MUHAMEDDISPO" class="nav-logo" style="height: 100px; margin-bottom: 12px;" /></div><p class="footer-tagline">Elevating the standard of lifestyle hardware and distillates.</p></div>
+    <div class="footer-col"><div class="footer-col-title">Shop</div><a href="products.html?group=all-in-one">All-In-One</a><a href="products.html?group=cartridges">Cartridges</a></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><a href="index.html#brand-story">Our Story</a><a href="index.html#contact">Contact</a></div>
+    <div class="footer-col"><div class="footer-col-title">Find Us</div><a href="index.html#find-us">Store Locator</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 MUHAMEDDISPO. All rights reserved.</span><span>21+ Only</span></div>
+</footer>
+
+<script src="js/supabase-client.js"></script>
+<script src="js/product-detail.js"></script>
+</body>
+</html>
+

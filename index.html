@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MUHAMEDDISPO — Inhale Excellence</title>
+  <meta name="description" content="Premium vape hardware and distillates. Precision-engineered cartridges and all-in-ones for the gold standard of urban luxury."/>
+  <meta name="theme-color" content="#0a0a0a"/>
+  <!-- CSP: TODO(security) — tighten nonce-based CSP when deploying to a server -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://fujlhixdfdltretlplxl.supabase.co; img-src 'self' https://fujlhixdfdltretlplxl.supabase.co data: blob:; media-src 'self' https://fujlhixdfdltretlplxl.supabase.co blob:; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <!-- Supabase JS (SRI hash pinned to v2.45.4) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"
+    integrity="sha256-lid+wA4Z30dtc5aoolhrQe0QM9z2gPWqebDFVgWXkrg="
+    crossorigin="anonymous"></script>
+  <!-- NOTE: Verify and update SRI hash when upgrading supabase-js version -->
+</head>
+<body>
+
+<!-- AGE GATE -->
+<div id="age-gate">
+  <img src="Logo.png" alt="MUHAMEDDISPO Logo" class="age-gate__logo-img" />
+  <h1 class="age-gate__title">Are you 21<br/>or older?</h1>
+  <p class="age-gate__sub">You must be of legal age to enter this site. By clicking YES, you confirm that you are of legal age to purchase tobacco and vaping products in your jurisdiction.</p>
+  <div class="age-gate__btns">
+    <button id="age-yes" class="btn-age-yes">Yes, I'm 21+</button>
+    <button id="age-no" class="btn-age-no">No, take me back</button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar" aria-label="Primary navigation">
+  <a href="index.html" class="nav-brand">
+    <img src="Logo.png" alt="MUHAMEDDISPO" class="nav-logo" style="height: 100px; margin-bottom: 12px;" />
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <div style="position:relative;">
+      <button id="nav-products-btn" aria-expanded="false" aria-haspopup="true">Products ▾</button>
+      <div class="nav-dropdown" id="nav-dropdown" role="menu">
+        <a href="products.html?group=all-in-one" role="menuitem">All-In-One</a>
+        <a href="products.html?group=cartridges" role="menuitem">Cartridges</a>
+      </div>
+    </div>
+    <a href="#find-us">Find Us</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a href="cart.html" class="nav-cart-btn" id="nav-cart" aria-label="Shopping cart">
+      🛒 Cart
+      <span class="cart-count" id="cart-count" aria-live="polite"></span>
+    </a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <a href="products.html?group=all-in-one">All-In-One</a>
+  <a href="products.html?group=cartridges">Cartridges</a>
+  <a href="#find-us">Find Us</a>
+  <a href="#contact">Contact</a>
+  <a href="cart.html">Cart</a>
+</div>
+
+<!-- HERO SECTION -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="hero-bg" style="background-image: url('Background image.jpeg');"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Premium Vaping Hardware</div>
+    <h1 class="hero-title">Inhale<br/>Excellence</h1>
+    <p class="hero-sub">Precision-engineered hardware meets the world's most refined distillates. Experience the gold standard of urban luxury.</p>
+    <div class="hero-btns">
+      <a href="#products-lineup" class="btn-primary">Shop The Lineup</a>
+      <a href="#verify" class="btn-outline">Verify Product</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS LINEUP SECTION -->
+<section class="product-rail-section" id="products-lineup">
+  <div class="container">
+    <div class="rail-header">
+      <div>
+        <div class="section-label">Muha Dispo Products</div>
+        <h2 class="section-title">Scroll the lineup.</h2>
+      </div>
+      <div class="rail-scroll-btns">
+        <button class="rail-btn" id="groups-prev" aria-label="Scroll previous">←</button>
+        <button class="rail-btn" id="groups-next" aria-label="Scroll next">→</button>
+      </div>
+    </div>
+    <div class="gold-divider" aria-hidden="true"></div>
+  </div>
+
+  <!-- Rail Track -->
+  <div class="rail-track" id="groups-rail" role="list">
+    <!-- Skeleton placeholders -->
+    <div class="product-card skeleton-card" aria-hidden="true"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+    <div class="product-card skeleton-card" aria-hidden="true"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
+  </div>
+</section>
+
+<!-- BRAND STORY -->
+<section class="brand-story" id="brand-story">
+  <div class="brand-story-bg" style="background-image: url('Background image.jpeg');"></div>
+  <div class="brand-story-overlay"></div>
+  <div class="brand-story-content">
+    <div class="section-label" style="color:var(--gold);">Our Craft</div>
+    <h2 class="brand-story__title">The Pursuit<br/>of Perfection.</h2>
+    <p class="brand-story__desc">From the seed to the final puff, MUHAMEDDISPO represents an unwavering commitment to quality. We don't just follow standards—we define them. Our extraction processes ensure that every drop meets our strict "Inhale Excellence" philosophy.</p>
+    <a href="#products-lineup" class="btn-ghost">Our Story</a>
+  </div>
+</section>
+
+<!-- INQUIRIES -->
+<section id="find-us" class="contact-section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-left">
+        <div class="section-label">Partnerships</div>
+        <h2 class="section-title">Wholesale &<br/>Direct Inquiries.</h2>
+        <p class="contact-desc">Experience the gold standard of urban luxury in person. Our premium hardware and refined distillates are exclusively available through our network of verified partners nationwide. For wholesale, distribution, and general inquiries, connect with our dedicated team.</p>
+        <a href="mailto:contact@muhameddispo.com" class="btn-primary" style="margin-top:28px;">Email Our Team</a>
+      </div>
+      <div class="contact-right">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </div>
+          <h3 class="contact-card-title">Direct Contact</h3>
+          <p class="contact-card-text">Reach out directly for rapid support and partnership opportunities.</p>
+          <a href="mailto:contact@muhameddispo.com" class="contact-email-link">contact@muhameddispo.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN THE CIRCLE / NEWSLETTER -->
+<section id="contact" style="padding:80px 40px; background:var(--bg-page); border-top:1px solid var(--border);">
+  <div style="max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;">
+    <div>
+      <h2 class="section-title" style="margin-bottom:16px;">Join The Circle.</h2>
+      <p style="color:var(--text-muted); font-size:14px; line-height:1.7;">Get exclusive access to limited drops, members-only events, and the latest from the streets.</p>
+    </div>
+    <div>
+      <form id="newsletter-form" novalidate style="display:flex; gap:12px; flex-wrap:wrap;">
+        <input type="email" id="nl-email" class="form-input" placeholder="EMAIL ADDRESS" aria-label="Email address" required style="flex:1; min-width:200px;"/>
+        <button type="submit" class="btn-primary">Subscribe</button>
+      </form>
+      <p style="font-size:11px; color:var(--text-dim); margin-top:10px;">By subscribing, you agree to our Privacy Policy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <img src="Logo.png" alt="MUHAMEDDISPO" class="nav-logo" style="height: 100px; margin-bottom: 12px;" />
+      </div>
+      <p class="footer-tagline">Elevating the standard of lifestyle hardware and distillates.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Shop</div>
+      <a href="products.html?group=all-in-one">All-In-One</a>
+      <a href="products.html?group=cartridges">Cartridges</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <a href="#brand-story">Our Story</a>
+      <a href="#contact">Contact</a>
+      <a href="#">Compliance</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Find Us</div>
+      <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">Available in authorized dispensaries nationwide.</p>
+      <a href="#find-us" style="margin-top:12px; display:inline-block;">Store Locator</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 MUHAMEDDISPO. All rights reserved.</span>
+    <span>21+ Only · For Legal Use Where Permitted</span>
+  </div>
+</footer>
+
+<script src="js/supabase-client.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

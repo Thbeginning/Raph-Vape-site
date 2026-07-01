@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard · MUHAMEDDISPO Admin</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://fujlhixdfdltretlplxl.supabase.co; img-src 'self' https://fujlhixdfdltretlplxl.supabase.co data: blob:; media-src 'self' https://fujlhixdfdltretlplxl.supabase.co blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/admin-modals.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"
+    integrity="sha256-lid+wA4Z30dtc5aoolhrQe0QM9z2gPWqebDFVgWXkrg="
+    crossorigin="anonymous"></script>
+  <style>
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .subgroup-products { display:none; margin-top:12px; }
+    .subgroup-card { background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:8px; }
+    .subgroup-card-header { display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+    .expand-icon { color:var(--text-muted); transition:transform 0.2s; font-size:12px; }
+    .subgroup-card.open .expand-icon { transform: rotate(180deg); }
+    .subgroup-card.open .subgroup-products { display:block; }
+    .stock-badge { font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px; }
+    .in-stock { background:rgba(62,206,124,0.1);color:#3ece7c;border:1px solid rgba(62,206,124,0.3); }
+    .out-stock { background:rgba(230,80,80,0.1);color:#e55;border:1px solid rgba(230,80,80,0.3); }
+    
+    #login-view { display: none; }
+    #dashboard-view { display: none; }
+  </style>
+</head>
+<body style="background:#050505;">
+
+<!-- LOGIN VIEW -->
+<div id="login-view">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo" style="margin-bottom: 24px; text-align: center;">
+        <img src="Logo.png" alt="MUHAMEDDISPO" style="height: 120px;" />
+      </div>
+      <p class="login-sub">Admin Portal · Authorized Personnel Only</p>
+      <h1 class="login-title">Sign In</h1>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="admin@example.com" autocomplete="email" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" autocomplete="current-password" required minlength="8"/>
+        </div>
+
+        <div id="login-error" style="display:none;color:#e55;font-size:13px;margin-bottom:16px;padding:10px 14px;background:rgba(230,80,80,0.08);border:1px solid rgba(230,80,80,0.25);border-radius:8px;"></div>
+
+        <button type="submit" id="login-btn" class="btn-submit" style="width:100%;margin-top:8px;">
+          Sign In
+        </button>
+      </form>
+
+      <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border);">
+        <a href="index.html" style="font-size:12px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;"
+          onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
+          ← Back to site
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div id="dashboard-view">
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar__brand" style="margin-bottom: 32px; text-align: center;">
+        <img src="Logo.png" alt="MUHAMEDDISPO" style="height: 120px;" />
+        <br/><span style="font-size:9px;color:var(--text-dim);letter-spacing:2px;">ADMIN</span>
+      </div>
+
+      <button class="admin-nav-item active" id="tab-groups-btn" onclick="switchTab('groups')">
+        📦 Product Groups
+      </button>
+      <button class="admin-nav-item" id="tab-products-btn" onclick="switchTab('products')">
+        🧪 All Products
+      </button>
+      <div style="margin-top:auto;padding-top:40px;border-top:1px solid var(--border);margin-top:32px;">
+        <button class="admin-nav-item" id="logout-btn" style="color:#e55;">
+          ⬡ Sign Out
+        </button>
+        <a href="index.html" class="admin-nav-item" style="display:flex;gap:10px;align-items:center;color:var(--text-muted);">
+          ↗ View Site
+        </a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main" id="main" tabindex="-1">
+
+      <!-- ADMIN HEADER -->
+      <div class="admin-topbar">
+        <div>
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">Welcome back</div>
+          <div class="admin-page-title" id="admin-page-title">Product Groups</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div id="admin-user-email" style="font-size:12px;color:var(--text-muted);"></div>
+          <button class="btn-admin-add" id="main-add-btn" onclick="openGroupModal()">+ New Group</button>
+        </div>
+      </div>
+
+      <!-- GROUPS TAB -->
+      <div class="tab-panel active" id="tab-groups">
+        <div id="groups-list">
+          <div class="skeleton" style="height:80px;border-radius:10px;margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:80px;border-radius:10px;margin-bottom:12px;"></div>
+        </div>
+      </div>
+
+      <!-- ALL PRODUCTS TAB -->
+      <div class="tab-panel" id="tab-products">
+        <div style="margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;">
+          <select id="filter-group" class="form-select" style="max-width:220px;" onchange="loadAllProducts()">
+            <option value="">All Groups</option>
+          </select>
+        </div>
+        <div class="admin-card">
+          <table class="admin-table" id="all-products-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Group / Subgroup</th>
+                <th>Strain</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="all-products-body">
+              <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ====================== MODALS ====================== -->
+
+<!-- GROUP MODAL -->
+<div class="modal-overlay" id="group-modal" role="dialog" aria-modal="true" aria-label="Product Group">
+  <div class="modal">
+    <h2 class="modal-title" id="group-modal-title">New Product Group</h2>
+    <button class="modal-close" onclick="closeModal('group-modal')" aria-label="Close">✕</button>
+    <form id="group-form" novalidate>
+      <input type="hidden" id="gf-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="gf-name">Group Name *</label>
+          <input type="text" id="gf-name" class="form-input" placeholder="All-In-One" maxlength="100" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="gf-slug">URL Slug *</label>
+          <input type="text" id="gf-slug" class="form-input" placeholder="all-in-one" maxlength="80" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="gf-tagline">Tagline</label>
+        <input type="text" id="gf-tagline" class="form-input" placeholder="Disposable done right" maxlength="200"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="gf-desc">Description</label>
+        <textarea id="gf-desc" class="form-textarea" placeholder="Full product group description…" maxlength="1000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hero Image</label>
+        <div class="form-upload-area" id="gf-img-area" onclick="document.getElementById('gf-img-file').click()">
+          <input type="file" id="gf-img-file" accept="image/jpeg,image/png,image/webp" aria-label="Upload hero image"/>
+          <div id="gf-img-preview-wrap">Click to upload image (JPEG, PNG, WebP · max 5MB)</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">360° Video</label>
+        <div class="form-upload-area" id="gf-vid-area" onclick="document.getElementById('gf-vid-file').click()">
+          <input type="file" id="gf-vid-file" accept="video/mp4,video/webm" aria-label="Upload product video"/>
+          <div id="gf-vid-preview-wrap">Click to upload video (MP4, WebM · max 50MB)</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="gf-order">Sort Order</label>
+          <input type="number" id="gf-order" class="form-input" value="0" min="0" max="999"/>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal('group-modal')">Cancel</button>
+        <button type="submit" class="btn-submit" id="gf-submit">Save Group</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- SUBGROUP MODAL -->
+<div class="modal-overlay" id="subgroup-modal" role="dialog" aria-modal="true" aria-label="Product Subgroup">
+  <div class="modal">
+    <h2 class="modal-title" id="sg-modal-title">New Subgroup</h2>
+    <button class="modal-close" onclick="closeModal('subgroup-modal')" aria-label="Close">✕</button>
+    <form id="subgroup-form" novalidate>
+      <input type="hidden" id="sgf-id"/>
+      <input type="hidden" id="sgf-group-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="sgf-name">Subgroup Name *</label>
+          <input type="text" id="sgf-name" class="form-input" placeholder="Melted Diamonds" maxlength="100" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sgf-slug">URL Slug *</label>
+          <input type="text" id="sgf-slug" class="form-input" placeholder="melted-diamonds" maxlength="80" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="sgf-desc">Description</label>
+        <textarea id="sgf-desc" class="form-textarea" placeholder="Subgroup description…" maxlength="800"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="sgf-order">Sort Order</label>
+        <input type="number" id="sgf-order" class="form-input" value="0" min="0" max="999"/>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal('subgroup-modal')">Cancel</button>
+        <button type="submit" class="btn-submit" id="sgf-submit">Save Subgroup</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal" role="dialog" aria-modal="true" aria-label="Product">
+  <div class="modal">
+    <h2 class="modal-title" id="pf-modal-title">New Product</h2>
+    <button class="modal-close" onclick="closeModal('product-modal')" aria-label="Close">✕</button>
+    <form id="product-form" novalidate>
+      <input type="hidden" id="pf-id"/>
+      <input type="hidden" id="pf-subgroup-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="pf-name">Product Name *</label>
+          <input type="text" id="pf-name" class="form-input" placeholder="Durban Delight" maxlength="150" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pf-slug">URL Slug *</label>
+          <input type="text" id="pf-slug" class="form-input" placeholder="durban-delight" maxlength="100" required/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="pf-strain">Strain Type</label>
+          <select id="pf-strain" class="form-select">
+            <option value="hybrid">Hybrid</option>
+            <option value="sativa">Sativa</option>
+            <option value="indica">Indica</option>
+            <option value="cbd">CBD</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pf-price">Price ($) *</label>
+          <input type="number" id="pf-price" class="form-input" placeholder="35.00" min="0" max="9999" step="0.01" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pf-desc">Description</label>
+        <textarea id="pf-desc" class="form-textarea" placeholder="Product description…" maxlength="1000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Product Image</label>
+        <div class="form-upload-area" id="pf-img-area" onclick="document.getElementById('pf-img-file').click()">
+          <input type="file" id="pf-img-file" accept="image/jpeg,image/png,image/webp" aria-label="Upload product image"/>
+          <div id="pf-img-preview-wrap">Click to upload image (JPEG, PNG, WebP · max 5MB)</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="pf-order">Sort Order</label>
+          <input type="number" id="pf-order" class="form-input" value="0" min="0" max="999"/>
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:12px;margin-top:28px;">
+          <label class="toggle" for="pf-stock">
+            <input type="checkbox" id="pf-stock" checked/>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="form-label" style="margin:0;">In Stock</span>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal('product-modal')">Cancel</button>
+        <button type="submit" class="btn-submit" id="pf-submit">Save Product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delete-modal" role="dialog" aria-modal="true" aria-label="Confirm deletion">
+  <div class="modal" style="max-width:400px;text-align:center;">
+    <h2 class="modal-title" style="margin-bottom:12px;">Delete Item?</h2>
+    <p id="delete-msg" style="color:var(--text-muted);font-size:14px;margin-bottom:28px;"></p>
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <button class="btn-cancel" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn-submit" id="delete-confirm-btn" style="background:#c0392b;">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase-client.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
