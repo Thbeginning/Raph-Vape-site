@@ -360,7 +360,7 @@ ul, ol { list-style: none; }
 }
 .hero-bg {
   position: absolute; inset: 0;
-  background-size: auto 120%; /* Zoomed just a little back as requested */
+  background-size: auto 100%; /* Zoomed out further to show full height */
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0;
@@ -369,7 +369,7 @@ ul, ol { list-style: none; }
 }
 .hero-bg.slide-active {
   opacity: 1;
-  transform: scale(1.04);
+  transform: scale(1.03); /* Slower, subtler cinematic zoom */
 }
 .hero-text-wrap {
   transition: opacity 0.8s ease, transform 0.8s ease;
