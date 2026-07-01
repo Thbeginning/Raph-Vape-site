@@ -3,9 +3,63 @@
 // =============================================
 
 document.addEventListener('DOMContentLoaded', async () => {
+  initHeroSlideshow();
   await loadGroupsRail();
   initNewsletterForm();
 });
+
+// =============================================
+// HERO SLIDESHOW
+// =============================================
+const heroSlides = [
+  {
+    eyebrow: 'Premium Vaping Hardware',
+    title: 'Inhale<br/>Excellence',
+    sub: 'Precision-engineered hardware meets the world\'s most refined distillates. Experience the gold standard of urban luxury.'
+  },
+  {
+    eyebrow: 'Unmatched Purity',
+    title: 'Elevate<br/>Your Senses',
+    sub: 'Discover the apex of flavor profiles crafted from exclusively sourced, top-tier cannabis. A journey of taste awaits.'
+  },
+  {
+    eyebrow: 'Exclusive Drops',
+    title: 'The Apex<br/>Collection',
+    sub: 'Limited batches of our most sought-after strains. Engineered for those who demand nothing but the absolute best.'
+  }
+];
+
+function initHeroSlideshow() {
+  const bgs = document.querySelectorAll('.hero-bg');
+  const textWrap = document.getElementById('hero-text-wrap');
+  const eyebrow = document.getElementById('hero-eyebrow');
+  const title = document.getElementById('hero-title');
+  const sub = document.getElementById('hero-sub');
+  
+  if (!bgs.length || !textWrap) return;
+
+  let currentIndex = 0;
+
+  setInterval(() => {
+    // 1. Fade out text
+    textWrap.classList.add('fade-out');
+
+    // 2. Change active background
+    bgs[currentIndex].classList.remove('slide-active');
+    currentIndex = (currentIndex + 1) % bgs.length;
+    bgs[currentIndex].classList.add('slide-active');
+
+    // 3. Update text while hidden, then fade in
+    setTimeout(() => {
+      const slide = heroSlides[currentIndex];
+      eyebrow.innerHTML = slide.eyebrow;
+      title.innerHTML = slide.title;
+      sub.innerHTML = slide.sub;
+      textWrap.classList.remove('fade-out');
+    }, 800); // Matches the textWrap fade-out transition duration
+
+  }, 6000); // Change slide every 6 seconds
+}
 
 // =============================================
 // Load Product Groups into Rail

@@ -354,13 +354,31 @@ ul, ol { list-style: none; }
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
+.hero-bg-container {
+  position: absolute; inset: 0; z-index: 0;
+  background-color: var(--bg-page);
+}
 .hero-bg {
   position: absolute; inset: 0;
-  background-size: contain;
+  background-size: auto 120%; /* Zoomed just a little back as requested */
   background-position: center;
   background-repeat: no-repeat;
-  background-color: var(--bg-page);
-  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out, transform 8s linear;
+  transform: scale(1);
+}
+.hero-bg.slide-active {
+  opacity: 1;
+  transform: scale(1.04);
+}
+.hero-text-wrap {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero-text-wrap.fade-out {
+  opacity: 0;
+  transform: translateY(15px);
 }
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
