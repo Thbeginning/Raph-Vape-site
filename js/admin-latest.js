@@ -129,12 +129,96 @@ function switchTab(tab) {
       addBtn.onclick = () => openProductModal(null, null, 'wholesale_magic_flag'); 
     }
     loadWholesaleProducts();
+  } else if (tab === 'orders') {
+    document.getElementById('tab-orders').classList.add('active');
+    document.getElementById('tab-orders-btn').classList.add('active');
+    if (titleEl) titleEl.textContent = 'Customer Orders';
+    if (addBtn) { addBtn.style.display = 'none'; }
+    loadOrdersTab();
   } else {
     document.getElementById('tab-products').classList.add('active');
     document.getElementById('tab-products-btn').classList.add('active');
     if (titleEl) titleEl.textContent = 'All Products';
     if (addBtn) { addBtn.style.display = 'none'; }
     loadAllProducts();
+  }
+}
+
+// =============================================
+// ORDERS TAB
+// =============================================
+async function loadOrdersTab() {
+  const tbody = document.getElementById('orders-body');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Loading orders…</td></tr>';
+
+  try {
+    const sb = getSupabase();
+    const { data: orders, error } = await sb
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!orders || orders.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">No orders yet.</td></tr>';
+      return;
+    }
+
+    tbody.replaceChildren();
+    for (const order of orders) {
+      const row = buildOrderRow(order);
+      tbody.appendChild(row);
+    }
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#e55;">Could not load orders. Make sure the orders table exists in Supabase.</td></tr>';
+    console.error('Orders load error:', err);
+  }
+}
+
+function buildOrderRow(order) {
+  const tr = document.createElement('tr');
+  const shortId = (order.id || '').toString().substring(0, 8).toUpperCase();
+  const date = new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const status = order.status || 'pending';
+
+  const itemCount = Array.isArray(order.cart_items) ? order.cart_items.reduce((s, i) => s + (i.qty || 1), 0) : '?';
+
+  const statusBadge = `<span class="order-status-badge ${status}">${status}</span>`;
+
+  tr.innerHTML = `
+    <td style="font-family:monospace;font-size:12px;color:var(--gold);">#${shortId}</td>
+    <td>${order.customer_name || '—'}</td>
+    <td style="font-size:12px;color:var(--text-muted);">${order.customer_email || '—'}</td>
+    <td>${order.payment_method || '—'}</td>
+    <td style="color:var(--gold);font-weight:700;">$${parseFloat(order.subtotal || 0).toFixed(2)}</td>
+    <td>${statusBadge}</td>
+    <td style="font-size:12px;color:var(--text-muted);">${date}</td>
+    <td>
+      <select class="order-status-select" data-order-id="${order.id}" onchange="updateOrderStatus(this)">
+        <option value="pending" ${status==='pending'?'selected':''}>Pending</option>
+        <option value="confirmed" ${status==='confirmed'?'selected':''}>Confirmed</option>
+        <option value="shipped" ${status==='shipped'?'selected':''}>Shipped</option>
+        <option value="cancelled" ${status==='cancelled'?'selected':''}>Cancelled</option>
+      </select>
+    </td>
+  `;
+  return tr;
+}
+
+async function updateOrderStatus(selectEl) {
+  const orderId = selectEl.getAttribute('data-order-id');
+  const newStatus = selectEl.value;
+  try {
+    const sb = getSupabase();
+    const { error } = await sb.from('orders').update({ status: newStatus }).eq('id', orderId);
+    if (error) throw error;
+    showToast('Order status updated!', 'success');
+    loadOrdersTab();
+  } catch (err) {
+    showToast('Failed to update status', 'error');
+    console.error(err);
   }
 }
 

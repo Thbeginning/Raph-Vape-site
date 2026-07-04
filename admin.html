@@ -88,6 +88,9 @@
       <button class="admin-nav-item" id="tab-products-btn" onclick="switchTab('products')">
         🧪 All Products
       </button>
+      <button class="admin-nav-item" id="tab-orders-btn" onclick="switchTab('orders')">
+        📋 Orders
+      </button>
       <div style="margin-top:auto;padding-top:40px;border-top:1px solid var(--border);margin-top:32px;">
         <button class="admin-nav-item" id="logout-btn" style="color:#e55;">
           ⬡ Sign Out
@@ -164,6 +167,29 @@
             </thead>
             <tbody id="all-products-body">
               <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ORDERS TAB -->
+      <div class="tab-panel" id="tab-orders">
+        <div class="admin-card">
+          <table class="admin-table" id="orders-table">
+            <thead>
+              <tr>
+                <th style="min-width:80px;">Order #</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Payment</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-body">
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Loading orders…</td></tr>
             </tbody>
           </table>
         </div>

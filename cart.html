@@ -73,44 +73,182 @@
 
   <!-- CART CONTENT -->
   <div class="cart-wrap" id="cart-content">
-    <!-- Items -->
-    <div>
-      <div id="cart-items" role="list" aria-label="Cart items"></div>
-      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="index.html#products-lineup" class="btn-outline">← Continue Shopping</a>
-        <button id="clear-cart" type="button" style="font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 20px;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius-sm);background:none;transition:var(--transition);"
-          onmouseover="this.style.color='#e55';this.style.borderColor='#e55';"
-          onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';">
-          Clear Cart
+      <!-- CART ITEMS VIEW (default) -->
+    <div id="cart-items-view">
+      <!-- Items -->
+      <div>
+        <div id="cart-items" role="list" aria-label="Cart items"></div>
+        <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="index.html#products-lineup" class="btn-outline">← Continue Shopping</a>
+          <button id="clear-cart" type="button" style="font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 20px;color:var(--text-muted);border:1px solid var(--border);border-radius:var(--radius-sm);background:none;transition:var(--transition);"
+            onmouseover="this.style.color='#e55';this.style.borderColor='#e55';"
+            onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';">
+            Clear Cart
+          </button>
+        </div>
+      </div>
+      <!-- Summary -->
+      <aside class="cart-summary" aria-label="Order summary">
+        <div class="cart-summary__title">Order Summary</div>
+        <div class="cart-summary__row">
+          <span>Items (<span id="summary-count">0</span>)</span>
+          <span id="summary-subtotal">$0.00</span>
+        </div>
+        <div class="cart-summary__row">
+          <span>Shipping</span>
+          <span style="color:var(--text-muted);font-size:12px;">Calculated at checkout</span>
+        </div>
+        <div class="gold-divider" style="margin:16px 0;"></div>
+        <div class="cart-summary__row">
+          <span style="font-family:var(--font-head);font-weight:700;">Total</span>
+          <span class="cart-summary__total" id="summary-total">$0.00</span>
+        </div>
+        <button type="button" id="checkout-btn" class="btn-add-cart" style="margin-top:20px;" aria-label="Proceed to checkout">
+          Proceed to Checkout →
         </button>
-      </div>
-    </div>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:12px;text-align:center;line-height:1.5;">
+          🔒 Secure checkout · 21+ Only<br/>For legal use where permitted.
+        </p>
+      </aside>
+    </div><!-- /cart-items-view -->
 
-    <!-- Summary -->
-    <aside class="cart-summary" aria-label="Order summary">
-      <div class="cart-summary__title">Order Summary</div>
-      <div class="cart-summary__row">
-        <span>Items (<span id="summary-count">0</span>)</span>
-        <span id="summary-subtotal">$0.00</span>
+      <!-- Checkout panel (hidden until Proceed is clicked) -->
+      <div id="checkout-panel" class="checkout-panel" style="display:none;" aria-label="Checkout">
+        <h2 class="checkout-panel__title">Your Details</h2>
+        <p class="checkout-panel__subtitle">Complete the form below. Once your order is placed, we will send full payment instructions directly to your email.</p>
+        <form id="checkout-form" class="checkout-form" novalidate>
+          <!-- Contact -->
+          <div class="checkout-section-label">Contact Information</div>
+          <div class="checkout-row">
+            <div class="checkout-field">
+              <label class="checkout-label" for="co-name">Full Name *</label>
+              <input type="text" id="co-name" class="checkout-input" placeholder="John Doe" required autocomplete="name" />
+            </div>
+            <div class="checkout-field">
+              <label class="checkout-label" for="co-email">Email Address *</label>
+              <input type="email" id="co-email" class="checkout-input" placeholder="you@example.com" required autocomplete="email" />
+            </div>
+          </div>
+          <div class="checkout-row">
+            <div class="checkout-field">
+              <label class="checkout-label" for="co-phone">Phone Number</label>
+              <input type="tel" id="co-phone" class="checkout-input" placeholder="+1 (555) 000-0000" autocomplete="tel" />
+            </div>
+          </div>
+          <!-- Shipping -->
+          <div class="checkout-section-label" style="margin-top:24px;">Shipping Address</div>
+          <div class="checkout-field">
+            <label class="checkout-label" for="co-address">Street Address *</label>
+            <input type="text" id="co-address" class="checkout-input" placeholder="123 Main St" required autocomplete="street-address" />
+          </div>
+          <div class="checkout-row">
+            <div class="checkout-field">
+              <label class="checkout-label" for="co-city">City *</label>
+              <input type="text" id="co-city" class="checkout-input" placeholder="Los Angeles" required autocomplete="address-level2" />
+            </div>
+            <div class="checkout-field" style="flex:0 0 120px;">
+              <label class="checkout-label" for="co-state">State *</label>
+              <input type="text" id="co-state" class="checkout-input" placeholder="CA" required autocomplete="address-level1" maxlength="2" />
+            </div>
+            <div class="checkout-field" style="flex:0 0 130px;">
+              <label class="checkout-label" for="co-zip">ZIP Code *</label>
+              <input type="text" id="co-zip" class="checkout-input" placeholder="90001" required autocomplete="postal-code" />
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="checkout-section-label" style="margin-top:28px;">Select Payment Method</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">Choose your preferred payment method below. After placing your order, the full payment details (wallet address, handle, or QR code) will be sent directly to your email inbox.</p>
+          <div class="payment-methods" id="payment-methods" role="radiogroup" aria-label="Payment method">
+
+            <!-- Bitcoin -->
+            <label class="payment-card" data-method="Bitcoin">
+              <input type="radio" name="payment" value="Bitcoin" class="payment-radio" />
+              <div class="payment-card__inner">
+                <svg class="payment-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#F7931A"/><path d="M22.6 14.1c.3-2.1-1.3-3.2-3.5-3.9l.7-2.9-1.7-.4-.7 2.8-1.3-.3.7-2.8-1.7-.4-.7 2.9c-.4-.1-.8-.2-1.2-.3l0 0-2.4-.6-.5 1.8s1.3.3 1.3.3c.7.2.8.7.8 1.1l-.8 3.3c0 0 .1 0 .2.1l-.2 0-.8 3.2-.7 2.8 1.7.4.7-2.9 1.3.3-.7 2.9 1.7.4.7-2.9c2.9.5 5-.2 5.9-2.8.7-2-.1-3.2-1.5-3.9 1.1-.3 1.9-1 2.1-2.4zm-3.8 5.3c-.5 2-3.8 1-4.9.7l.9-3.5c1.1.3 4.5.8 4 2.8zm.5-5.4c-.5 1.8-3.3.9-4.2.7l.8-3.2c.9.2 3.9.6 3.4 2.5z" fill="#fff"/></svg>
+                <div>
+                  <div class="payment-card__name">Bitcoin</div>
+                  <div class="payment-card__desc">Secure &amp; private crypto payment</div>
+                </div>
+                <div class="payment-card__check">✓</div>
+              </div>
+            </label>
+
+            <!-- CashApp -->
+            <label class="payment-card" data-method="CashApp">
+              <input type="radio" name="payment" value="CashApp" class="payment-radio" />
+              <div class="payment-card__inner">
+                <svg class="payment-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="#00D632"/><path d="M16.7 8l-.5 2.1c1.7.4 3 1.4 3.2 2.8h-2.3c-.1-.6-.7-1.1-1.8-1.1-1 0-1.6.4-1.6 1.1 0 .6.4.9 1.4 1.1l1.5.4c2.2.5 3.2 1.5 3.2 3.1 0 1.8-1.4 3-3.5 3.3l-.5 2.2h-1.7l.5-2.2c-2-.4-3.4-1.6-3.6-3.2h2.3c.2.8.9 1.3 2.1 1.3 1.1 0 1.8-.5 1.8-1.2 0-.6-.4-1-1.5-1.2l-1.4-.3c-2-.5-3.1-1.5-3.1-3.1 0-1.7 1.2-2.9 3.2-3.2l.5-2.1h1.8z" fill="#fff"/></svg>
+                <div>
+                  <div class="payment-card__name">CashApp</div>
+                  <div class="payment-card__desc">Send via $cashtag instantly</div>
+                </div>
+                <div class="payment-card__check">✓</div>
+              </div>
+            </label>
+
+            <!-- Apple Pay -->
+            <label class="payment-card" data-method="ApplePay">
+              <input type="radio" name="payment" value="ApplePay" class="payment-radio" />
+              <div class="payment-card__inner">
+                <svg class="payment-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="6" fill="#000"/><path d="M16.1 9.1c.6-.8 1.7-1.4 2.6-1.4.1 1.1-.3 2.1-.9 2.9-.6.7-1.6 1.3-2.6 1.2-.1-1.1.3-2.1.9-2.7zm4.5 8.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.5-.1-2.9.9-3.6.9-.8 0-1.9-.8-3.2-.8-1.6 0-3.2 1-4 2.5-1.7 3 .4 7.4 1.2 9.8.8 1.2 1.8 2.4 3 2.4 1.2-.1 1.6-.8 3.1-.8 1.4 0 1.8.8 3.1.7 1.3 0 2.1-1.1 2.9-2.3.9-1.3 1.2-2.6 1.2-2.7-.1 0-2.3-.9-2.3-3.4z" fill="#fff"/></svg>
+                <div>
+                  <div class="payment-card__name">Apple Pay</div>
+                  <div class="payment-card__desc">Fast &amp; secure with Apple Wallet</div>
+                </div>
+                <div class="payment-card__check">✓</div>
+              </div>
+            </label>
+
+            <!-- Zelle -->
+            <label class="payment-card" data-method="Zelle">
+              <input type="radio" name="payment" value="Zelle" class="payment-radio" />
+              <div class="payment-card__inner">
+                <svg class="payment-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="16" fill="#6D1ED4"/><text x="5" y="22" font-family="Arial Black,Arial" font-weight="900" font-size="16" fill="#fff">Z</text></svg>
+                <div>
+                  <div class="payment-card__name">Zelle</div>
+                  <div class="payment-card__desc">Direct bank transfer</div>
+                </div>
+                <div class="payment-card__check">✓</div>
+              </div>
+            </label>
+
+            <!-- Chime -->
+            <label class="payment-card" data-method="Chime">
+              <input type="radio" name="payment" value="Chime" class="payment-radio" />
+              <div class="payment-card__inner">
+                <svg class="payment-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="#1EC677"/><path d="M10 16c0-3.3 2.7-6 6-6 2 0 3.8 1 4.9 2.5l-1.6 1.1C18.5 12.6 17.3 12 16 12c-2.2 0-4 1.8-4 4s1.8 4 4 4c1.3 0 2.5-.6 3.3-1.6l1.6 1.1C19.8 21 18 22 16 22c-3.3 0-6-2.7-6-6z" fill="#fff"/></svg>
+                <div>
+                  <div class="payment-card__name">Chime</div>
+                  <div class="payment-card__desc">Instant Chime Pay transfer</div>
+                </div>
+                <div class="payment-card__check">✓</div>
+              </div>
+            </label>
+
+          </div><!-- /payment-methods -->
+
+          <div id="checkout-error" class="checkout-error" style="display:none;"></div>
+
+          <button type="submit" class="btn-primary checkout-submit-btn" id="checkout-submit-btn">
+            Place Order &amp; Receive Payment Details →
+          </button>
+          <p style="text-align:center;font-size:11px;color:var(--text-dim);margin-top:12px;">🔒 Your information is secure and encrypted. Payment details will be emailed to you within minutes.</p>
+          <button type="button" class="checkout-back-btn" id="checkout-back-btn">← Back to Cart</button>
+        </form>
+      </div><!-- /checkout-panel -->
+
+      <!-- Success Screen -->
+      <div id="checkout-success" class="checkout-success" style="display:none;">
+        <div class="checkout-success__icon">✓</div>
+        <h2 class="checkout-success__title">Order Received!</h2>
+        <p class="checkout-success__msg" id="success-msg">Thank you! Your order has been placed successfully. Check your email for your invoice and full payment instructions. Once we confirm your payment, we will process and ship your order promptly.</p>
+        <div class="checkout-success__ref" id="success-ref"></div>
+        <a href="index.html" class="btn-primary" style="margin-top:32px;display:inline-block;">Continue Shopping</a>
       </div>
-      <div class="cart-summary__row">
-        <span>Shipping</span>
-        <span style="color:var(--text-muted);font-size:12px;">Calculated at checkout</span>
-      </div>
-      <div class="gold-divider" style="margin:16px 0;"></div>
-      <div class="cart-summary__row">
-        <span style="font-family:var(--font-head);font-weight:700;">Total</span>
-        <span class="cart-summary__total" id="summary-total">$0.00</span>
-      </div>
-      <button type="button" id="checkout-btn" class="btn-add-cart" style="margin-top:20px;" aria-label="Proceed to checkout">
-        Proceed to Checkout →
-      </button>
-      <p style="font-size:11px;color:var(--text-dim);margin-top:12px;text-align:center;line-height:1.5;">
-        🔒 Secure checkout · 21+ Only<br/>For legal use where permitted.
-      </p>
-    </aside>
-  </div>
-</main>
+
+    </div><!-- /.cart-wrap end (moved closing tag) -->
+  </main>
 
 <!-- FOOTER -->
 <footer style="margin-top:80px;">
