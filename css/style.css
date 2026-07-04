@@ -2117,3 +2117,108 @@ footer {
   .verify-tab { font-size: 9px; padding: 11px 6px; }
 }
 
+/* =========================================
+   NEWSLETTER SECTION
+   ========================================= */
+.newsletter-section {
+  padding: 80px 20px;
+  background: var(--bg-page);
+  border-top: 1px solid var(--border-gold);
+  display: flex;
+  justify-content: center;
+}
+
+.newsletter-grid {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(197, 179, 111, 0.05);
+  border: 1px solid rgba(197, 179, 111, 0.2);
+  border-radius: 16px;
+  padding: 50px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.newsletter-title {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.newsletter-desc {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.newsletter-form-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.newsletter-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(197, 179, 111, 0.2);
+}
+
+.newsletter-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.newsletter-legal {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 16px;
+  text-align: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .newsletter-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .newsletter-title {
+    font-size: 28px;
+  }
+  
+  .newsletter-legal {
+    text-align: center;
+  }
+}
+

@@ -204,18 +204,18 @@
 </section>
 
 <!-- JOIN THE CIRCLE / NEWSLETTER -->
-<section id="contact" style="padding:80px 40px; background:var(--bg-page); border-top:1px solid var(--border);">
-  <div style="max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;">
-    <div>
-      <h2 class="section-title" style="margin-bottom:16px;">Join The Circle.</h2>
-      <p style="color:var(--text-muted); font-size:14px; line-height:1.7;">Get exclusive access to limited drops, members-only events, and the latest from the streets.</p>
+<section id="contact" class="newsletter-section">
+  <div class="newsletter-grid">
+    <div class="newsletter-content">
+      <h2 class="newsletter-title">JOIN THE CIRCLE.</h2>
+      <p class="newsletter-desc">Get exclusive access to limited drops, members-only events, and the latest from the streets.</p>
     </div>
-    <div>
-      <form id="newsletter-form" novalidate style="display:flex; gap:12px; flex-wrap:wrap;">
-        <input type="email" id="nl-email" class="form-input" placeholder="EMAIL ADDRESS" aria-label="Email address" required style="flex:1; min-width:200px;"/>
-        <button type="submit" class="btn-primary">Subscribe</button>
+    <div class="newsletter-form-wrapper">
+      <form id="newsletter-form" class="newsletter-form" novalidate>
+        <input type="email" id="nl-email" class="newsletter-input" placeholder="EMAIL ADDRESS" aria-label="Email address" required />
+        <button type="submit" class="btn-primary newsletter-btn">SUBSCRIBE</button>
       </form>
-      <p style="font-size:11px; color:var(--text-dim); margin-top:10px;">By subscribing, you agree to our Privacy Policy.</p>
+      <p class="newsletter-legal">By subscribing, you agree to our Privacy Policy.</p>
     </div>
   </div>
 </section>
