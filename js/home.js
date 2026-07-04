@@ -264,3 +264,24 @@ function initNewsletterForm() {
     showToast('You\'re on the list! Welcome to the circle.', 'success');
   });
 }
+
+// Story Animation Observer
+document.addEventListener('DOMContentLoaded', () => {
+  const storyElements = document.querySelectorAll('.story-anim-element');
+  
+  if ('IntersectionObserver' in window) {
+    const storyObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    storyElements.forEach(el => storyObserver.observe(el));
+  } else {
+    // Fallback for older browsers
+    storyElements.forEach(el => el.classList.add('in-view'));
+  }
+});

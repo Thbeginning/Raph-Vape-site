@@ -2795,3 +2795,65 @@ footer {
     gap: 40px;
   }
 }
+
+/* Enhanced Brand Story Styles & Typography */
+.brand-story__title {
+  font-family: var(--font-head);
+  font-size: 56px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.brand-story__desc.main-desc {
+  font-size: 16px;
+  margin-bottom: 32px;
+  max-width: 480px;
+  line-height: 1.7;
+}
+
+.brand-story__desc.sub-desc {
+  font-size: 15px;
+  color: #888;
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+.story-pillar-title {
+  font-family: var(--font-main);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+
+/* Animations */
+.story-anim-element {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.story-anim-element.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  .brand-story {
+    padding: 60px 0;
+  }
+  .brand-story__title {
+    font-size: 38px;
+  }
+  .story-pillar {
+    padding: 20px 24px;
+  }
+  .story-pillar-title {
+    font-size: 14px;
+  }
+}

@@ -98,6 +98,10 @@
           <span>Shipping</span>
           <span style="color:var(--text-muted);font-size:12px;">Calculated at checkout</span>
         </div>
+        <div style="background:rgba(197,179,111,0.1); border:1px solid rgba(197,179,111,0.2); padding:10px; border-radius:6px; margin-top:12px; font-size:12px; color:#c5b36f; text-align:center;">
+          <strong style="display:block; margin-bottom:4px;">Minimum Order: $120.00</strong>
+          Bulk purchases come with <strong>FREE SHIPPING</strong>.
+        </div>
         <div class="gold-divider" style="margin:16px 0;"></div>
         <div class="cart-summary__row">
           <span style="font-family:var(--font-head);font-weight:700;">Total</span>
@@ -115,7 +119,10 @@
       <!-- Checkout panel (hidden until Proceed is clicked) -->
       <div id="checkout-panel" class="checkout-panel" style="display:none;" aria-label="Checkout">
         <h2 class="checkout-panel__title">Your Details</h2>
-        <p class="checkout-panel__subtitle">Complete the form below. Once your order is placed, we will send full payment instructions directly to your email.</p>
+        <div class="checkout-panel__subtitle">
+          Complete the form below. Once your order is placed, <strong>for the payment method you choose, the account information will be sent directly to you via email.</strong>
+          <br><br><span style="color:var(--gold);">Note: Minimum checkout amount is $120. Bulk purchases come with free shipping.</span>
+        </div>
         <form id="checkout-form" class="checkout-form" novalidate>
           <!-- Contact -->
           <div class="checkout-section-label">Contact Information</div>

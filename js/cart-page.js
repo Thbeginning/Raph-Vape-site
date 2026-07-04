@@ -163,10 +163,18 @@ function initCartActions() {
   if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
       const cart = getCart();
+      const total = getCartTotal();
+
       if (cart.length === 0) {
         showToast('Your cart is empty.', 'error');
         return;
       }
+
+      if (total < 120) {
+        showToast('Minimum order amount is $120.00', 'error');
+        return;
+      }
+
       showCheckoutPanel();
     });
   }
