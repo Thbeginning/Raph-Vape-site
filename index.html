@@ -108,6 +108,15 @@
   </div>
 </section>
 
+<!-- FIND YOUR STRAIN CTA -->
+<section class="quiz-cta-section">
+  <div class="quiz-cta-content">
+    <h2 class="quiz-cta-title">Find Your Perfect Strain</h2>
+    <p class="quiz-cta-desc">Not sure what you're looking for? Let our AI budtender match you with the perfect product based on your desired effects and flavor profile.</p>
+    <button id="open-quiz-btn" class="btn-primary">Take The Quiz</button>
+  </div>
+</section>
+
 <!-- PRODUCTS LINEUP SECTION -->
 <section class="product-rail-section" id="products-lineup">
   <div class="container">
@@ -232,8 +241,67 @@
   </div>
 </footer>
 
-<script src="js/supabase-client.js"></script>
+<!-- FIND YOUR STRAIN QUIZ MODAL -->
+<div class="quiz-modal" id="quiz-modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="quiz-modal-backdrop" id="quiz-modal-backdrop"></div>
+  <div class="quiz-modal-content">
+    <button class="quiz-close-btn" id="quiz-close-btn" aria-label="Close Quiz">✕</button>
+    
+    <!-- Question 1 -->
+    <div class="quiz-step active" id="quiz-step-1">
+      <h3 class="quiz-question">What vibe are you looking for?</h3>
+      <div class="quiz-options">
+        <button class="quiz-option" data-answer="relax">Relax & Unwind</button>
+        <button class="quiz-option" data-answer="energize">Energize & Focus</button>
+        <button class="quiz-option" data-answer="balance">Balanced & Creative</button>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="quiz-step" id="quiz-step-2">
+      <h3 class="quiz-question">What is your preferred flavor profile?</h3>
+      <div class="quiz-options">
+        <button class="quiz-option" data-answer="sweet">Sweet & Fruity</button>
+        <button class="quiz-option" data-answer="earthy">Earthy & Pine</button>
+        <button class="quiz-option" data-answer="diesel">Diesel & Pungent</button>
+        <button class="quiz-option" data-answer="surprise">Surprise Me</button>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="quiz-step" id="quiz-step-3">
+      <h3 class="quiz-question">When will you be enjoying this?</h3>
+      <div class="quiz-options">
+        <button class="quiz-option" data-answer="morning">Morning Start</button>
+        <button class="quiz-option" data-answer="afternoon">Afternoon Boost</button>
+        <button class="quiz-option" data-answer="evening">Evening Chill</button>
+        <button class="quiz-option" data-answer="night">Late Night Sleep</button>
+      </div>
+    </div>
+
+    <!-- Analyzing / Loading -->
+    <div class="quiz-step" id="quiz-step-loading">
+      <h3 class="quiz-question">Finding your perfect match...</h3>
+      <div class="quiz-loader"></div>
+    </div>
+
+    <!-- Results -->
+    <div class="quiz-step" id="quiz-step-result">
+      <h3 class="quiz-question">We Found Your Match.</h3>
+      <p class="quiz-result-type" id="quiz-result-type">You are looking for an <span>Indica</span>.</p>
+      <div class="quiz-result-product" id="quiz-result-product">
+        <!-- Product card injected here -->
+      </div>
+      <button class="btn-outline" id="quiz-restart-btn" style="margin-top:24px; width:100%;">Retake Quiz</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/supabase-client.js?v=8"></script>
 <script src="js/home.js"></script>
+<script src="js/verify.js"></script>
+<script src="js/quiz.js"></script>
 
 <!-- ===== PRODUCT VERIFICATION MODAL ===== -->
 <div id="verify-modal" class="verify-modal" role="dialog" aria-modal="true" aria-labelledby="verify-modal-title">
