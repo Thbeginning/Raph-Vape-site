@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 // =============================================
 const heroSlides = [
   {
+    eyebrow: 'Inhale Excellence',
+    title: 'The Gold<br/>Standard',
+    sub: 'Experience MUHAMEDDISPO in motion. Precision craftsmanship, refined distillates, and a legacy built on excellence.'
+  },
+  {
     eyebrow: 'Premium Vaping Hardware',
     title: 'Inhale<br/>Excellence',
     sub: 'Precision-engineered hardware meets the world\'s most refined distillates. Experience the gold standard of urban luxury.'
@@ -31,35 +36,93 @@ const heroSlides = [
 
 function initHeroSlideshow() {
   const bgs = document.querySelectorAll('.hero-bg');
+  const bgContainer = document.getElementById('hero-bg-container');
   const textWrap = document.getElementById('hero-text-wrap');
   const eyebrow = document.getElementById('hero-eyebrow');
   const title = document.getElementById('hero-title');
   const sub = document.getElementById('hero-sub');
-  
-  if (!bgs.length || !textWrap) return;
+  const heroVideo = document.getElementById('hero-video');
+
+  if (!bgs.length || !textWrap || !bgContainer) return;
+
+  // === Create the gold shimmer sweep element ===
+  const shimmer = document.createElement('div');
+  shimmer.className = 'hero-transition-shimmer';
+  bgContainer.appendChild(shimmer);
 
   let currentIndex = 0;
+  const videoIndex = 0; // Video is the first slide
+
+  // Helper: manage video play/pause safely
+  function manageVideo(isActive) {
+    if (!heroVideo) return;
+    if (isActive) {
+      heroVideo.play().catch(() => {}); // Catch autoplay policy rejections silently
+    } else {
+      heroVideo.pause();
+      heroVideo.currentTime = 0;
+    }
+  }
+
+  // Helper: fire the gold shimmer sweep animation
+  function triggerShimmer() {
+    shimmer.classList.remove('shimmer-play');
+    void shimmer.offsetWidth; // Force reflow so animation restarts cleanly
+    shimmer.classList.add('shimmer-play');
+    shimmer.addEventListener('animationend', () => {
+      shimmer.classList.remove('shimmer-play');
+    }, { once: true });
+  }
+
+  // Video is the first active slide — start playing immediately
+  manageVideo(true);
 
   setInterval(() => {
-    // 1. Fade out text
+    const fromIndex = currentIndex;
+    const isLeavingVideo = (fromIndex === videoIndex);
+
+    // 1. Fade out text overlay
     textWrap.classList.add('fade-out');
 
-    // 2. Change active background
-    bgs[currentIndex].classList.remove('slide-active');
-    currentIndex = (currentIndex + 1) % bgs.length;
-    bgs[currentIndex].classList.add('slide-active');
+    // 2. Outgoing slide: add leaving class (push-scale + fade) instead of just removing active
+    bgs[fromIndex].classList.remove('slide-active');
+    bgs[fromIndex].classList.add('slide-leaving');
 
-    // 3. Update text while hidden, then fade in
+    // 3. Pause video if leaving video slide
+    if (isLeavingVideo) {
+      manageVideo(false);
+      // Fire gold shimmer sweep for the premium video→photo moment
+      setTimeout(() => triggerShimmer(), 100);
+    }
+
+    // 4. Advance index
+    currentIndex = (currentIndex + 1) % bgs.length;
+
+    // 5. Activate incoming slide (slight delay lets the leaving animation begin first)
+    const activateDelay = isLeavingVideo ? 180 : 80;
+    setTimeout(() => {
+      bgs[currentIndex].classList.add('slide-active');
+      if (currentIndex === videoIndex) manageVideo(true);
+    }, activateDelay);
+
+    // 6. Clean up leaving class once transition completes
+    const cleanupDelay = 1600;
+    setTimeout(() => {
+      bgs[fromIndex].classList.remove('slide-leaving');
+    }, cleanupDelay);
+
+    // 7. Update text content while hidden, then fade back in
     setTimeout(() => {
       const slide = heroSlides[currentIndex];
       eyebrow.innerHTML = slide.eyebrow;
       title.innerHTML = slide.title;
       sub.innerHTML = slide.sub;
       textWrap.classList.remove('fade-out');
-    }, 800); // Matches the textWrap fade-out transition duration
+    }, 800);
 
-  }, 6000); // Change slide every 6 seconds
+  }, 6000); // Advance every 6 seconds
 }
+
 
 // =============================================
 // Load Product Groups into Rail

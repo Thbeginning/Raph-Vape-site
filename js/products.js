@@ -13,21 +13,47 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadProductsPage(slug) {
   try {
-    const group = await fetchGroup(slug);
+    let group;
+    if (slug === 'wholesale') {
+      group = { id: 'wholesale', name: 'Wholesale', slug: 'wholesale', description: 'Bulk orders and wholesale pricing.', hero_image_url: '' };
+    } else {
+      group = await fetchGroup(slug);
+    }
+    
     renderCategoryHero(group);
     document.title = group.name + ' · MUHAMEDDISPO';
     const metaDesc = document.getElementById('page-desc');
     if (metaDesc) metaDesc.setAttribute('content', group.description || '');
 
-    const subgroups = await fetchSubgroups(group.id);
     const container = document.getElementById('subgroups-container');
     container.replaceChildren();
 
-    for (let i = 0; i < subgroups.length; i++) {
-      const sg = subgroups[i];
-      const products = await fetchProductsBySubgroup(sg.id);
-      const section = buildSubgroupSection(sg, products, group.name, i);
+    if (slug === 'wholesale') {
+      // Fetch all wholesale products
+      const sb = getSupabase();
+      const { data: products } = await sb.from('products').select('*').order('sort_order');
+      const wholesaleProducts = products.filter(p => p.wholesale_options && p.wholesale_options.length > 0);
+      
+      const mockSubgroup = { slug: group.slug, name: group.name, description: group.description };
+      const section = buildSubgroupSection(mockSubgroup, wholesaleProducts, group.name, 0);
       container.appendChild(section);
+      return;
+    }
+
+    const subgroups = await fetchSubgroups(group.id);
+
+    if (subgroups.length === 0) {
+      const products = await fetchProductsByGroup(group.id);
+      const mockSubgroup = { slug: group.slug, name: group.name, description: group.description };
+      const section = buildSubgroupSection(mockSubgroup, products, group.name, 0);
+      container.appendChild(section);
+    } else {
+      for (let i = 0; i < subgroups.length; i++) {
+        const sg = subgroups[i];
+        const products = await fetchProductsBySubgroup(sg.id);
+        const section = buildSubgroupSection(sg, products, group.name, i);
+        container.appendChild(section);
+      }
     }
   } catch (err) {
     console.error('Failed to load products page');
@@ -280,22 +306,40 @@ function buildProductCard(product, subgroupName) {
   }
   body.appendChild(badges);
 
+  const isWholesale = product.wholesale_options && product.wholesale_options.length > 0;
+
   // Price
   const price = document.createElement('div');
   price.className = 'product-card__price';
-  price.textContent = product.price > 0 ? formatPrice(product.price) : 'Contact for Price';
+  if (isWholesale) {
+    const minPrice = Math.min(...product.wholesale_options.map(o => o.price));
+    const maxPrice = Math.max(...product.wholesale_options.map(o => o.price));
+    price.textContent = `${formatPrice(minPrice)} – ${formatPrice(maxPrice)}`;
+  } else {
+    price.textContent = product.price > 0 ? formatPrice(product.price) : 'Contact for Price';
+  }
   body.appendChild(price);
 
   // Add to cart button (shown on hover via CSS)
   const cartBtn = document.createElement('button');
   cartBtn.className = 'product-card__cart-btn';
   cartBtn.type = 'button';
-  cartBtn.textContent = 'Add to Cart';
-  cartBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart({ ...product, subgroupName });
-  });
+  
+  if (isWholesale) {
+    cartBtn.textContent = 'Select Options';
+    cartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = a.href;
+    });
+  } else {
+    cartBtn.textContent = 'Add to Cart';
+    cartBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      addToCart({ ...product, subgroupName });
+    });
+  }
   body.appendChild(cartBtn);
 
   a.appendChild(body);

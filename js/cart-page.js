@@ -61,7 +61,7 @@ function buildCartRow(item) {
 
   const name = document.createElement('div');
   name.className = 'cart-item__name';
-  name.textContent = safeText(item.name);
+  name.textContent = safeText(item.name) + (item.optionLabel ? ` (${safeText(item.optionLabel)})` : '');
   info.appendChild(name);
 
   const sub = document.createElement('div');

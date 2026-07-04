@@ -58,6 +58,17 @@ async function fetchSubgroups(groupId) {
   return data;
 }
 
+async function fetchProductsByGroup(groupId) {
+  const sb = getSupabase();
+  const { data, error } = await sb
+    .from('products')
+    .select('*')
+    .eq('group_id', groupId)
+    .order('sort_order');
+  if (error) throw error;
+  return data;
+}
+
 async function fetchProductsBySubgroup(subgroupId) {
   const sb = getSupabase();
   const { data, error } = await sb
@@ -73,7 +84,7 @@ async function fetchProduct(id) {
   const sb = getSupabase();
   const { data, error } = await sb
     .from('products')
-    .select(`*, product_subgroups(name, slug, product_groups(name, slug))`)
+    .select(`*, product_subgroups(name, slug, product_groups(name, slug)), product_groups(name, slug)`)
     .eq('id', id)
     .single();
   if (error) throw error;
@@ -110,32 +121,37 @@ function getCart() {
 function saveCart(cart) {
   // Validate cart before saving — ensure no injected properties
   const clean = cart.map(item => ({
-    id: String(item.id).substring(0, 64),
+    id: String(item.id).substring(0, 100), // increased length for option suffix
+    productId: String(item.productId || item.id).substring(0, 64),
     name: String(item.name).substring(0, 200),
     subgroupName: String(item.subgroupName || '').substring(0, 100),
     strainType: String(item.strainType || '').substring(0, 20),
     price: parseFloat(item.price) || 0,
     imageUrl: String(item.imageUrl || '').substring(0, 500),
     qty: Math.max(1, parseInt(item.qty) || 1),
+    optionLabel: String(item.optionLabel || '').substring(0, 100),
   }));
   localStorage.setItem(CART_KEY, JSON.stringify(clean));
   updateCartBadge();
 }
 
-function addToCart(product, qty = 1) {
+function addToCart(product, qty = 1, optionLabel = null, optionPrice = null) {
   const cart = getCart();
-  const existing = cart.find(i => i.id === product.id);
+  const cartId = optionLabel ? `${product.id}-${slugify(optionLabel)}` : product.id;
+  const existing = cart.find(i => i.id === cartId);
   if (existing) {
     existing.qty = Math.min(existing.qty + qty, 99);
   } else {
     cart.push({
-      id: product.id,
+      id: cartId,
+      productId: product.id,
       name: product.name,
       subgroupName: product.subgroupName || '',
       strainType: product.strain_type || '',
-      price: parseFloat(product.price) || 0,
+      price: optionPrice !== null ? parseFloat(optionPrice) : (parseFloat(product.price) || 0),
       imageUrl: product.image_url || '',
       qty: Math.min(qty, 99),
+      optionLabel: optionLabel || '',
     });
   }
   saveCart(cart);
@@ -205,15 +221,28 @@ function initAgeGate() {
   const passed = sessionStorage.getItem('age_verified');
   const gate = document.getElementById('age-gate');
   if (!gate) return;
-  if (passed === '1') { gate.remove(); return; }
+  if (passed === '1') { 
+    gate.remove(); 
+    return; 
+  }
+  
+  // Lock scrolling while age gate is active
+  document.body.style.overflow = 'hidden';
+  
   const yes = document.getElementById('age-yes');
   const no = document.getElementById('age-no');
+  
   if (yes) yes.addEventListener('click', () => {
     sessionStorage.setItem('age_verified', '1');
-    gate.style.transition = 'opacity 0.5s ease';
+    gate.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     gate.style.opacity = '0';
-    setTimeout(() => gate.remove(), 500);
+    gate.style.transform = 'scale(1.05)';
+    setTimeout(() => {
+      document.body.style.overflow = ''; // Unlock scrolling
+      gate.remove();
+    }, 500);
   });
+  
   if (no) no.addEventListener('click', () => {
     window.location.href = 'https://www.google.com';
   });
@@ -222,7 +251,7 @@ function initAgeGate() {
 // =============================================
 // Navbar
 // =============================================
-function initNavbar() {
+async function initNavbar() {
   const navbar = document.getElementById('navbar');
   if (!navbar) return;
 
@@ -236,12 +265,33 @@ function initNavbar() {
   const drawer = document.getElementById('nav-drawer');
   const drawerClose = document.getElementById('drawer-close');
   if (hamburger && drawer) {
-    hamburger.addEventListener('click', () => drawer.classList.add('open'));
+    hamburger.addEventListener('click', () => drawer.classList.toggle('open'));
     if (drawerClose) drawerClose.addEventListener('click', () => drawer.classList.remove('open'));
-    drawer.addEventListener('click', e => { if (e.target === drawer) drawer.classList.remove('open'); });
+    drawer.addEventListener('click', e => { 
+      // Close on clicking outside or clicking a regular link (excluding dropdown toggles)
+      if (e.target === drawer || (e.target.tagName === 'A' && !e.target.hasAttribute('data-dropdown-toggle'))) {
+        drawer.classList.remove('open'); 
+      }
+    });
   }
 
-  // Products dropdown
+  // Fetch groups dynamically and populate menus
+  try {
+    const groups = await fetchGroups();
+    const desktopDropdown = document.getElementById('nav-dropdown');
+    const mobileDropdown = document.getElementById('drawer-dropdown');
+    
+    if (groups && groups.length > 0) {
+      let htmlLinks = groups.map(g => `<a href="products.html?group=${encodeURIComponent(g.slug)}" role="menuitem">${safeText(g.name)}</a>`).join('');
+      htmlLinks += `<a href="products.html?group=wholesale" role="menuitem">Wholesale</a>`;
+      if (desktopDropdown) desktopDropdown.innerHTML = htmlLinks;
+      if (mobileDropdown) mobileDropdown.innerHTML = htmlLinks;
+    }
+  } catch (err) {
+    console.error('Failed to load navigation groups:', err);
+  }
+
+  // Desktop Products dropdown
   const productsBtn = document.getElementById('nav-products-btn');
   const dropdown = document.getElementById('nav-dropdown');
   if (productsBtn && dropdown) {
@@ -250,6 +300,18 @@ function initNavbar() {
       dropdown.classList.toggle('open');
     });
     document.addEventListener('click', () => dropdown.classList.remove('open'));
+  }
+
+  // Mobile Products dropdown
+  const drawerProductsBtn = document.getElementById('drawer-products-btn');
+  const drawerDropdown = document.getElementById('drawer-dropdown');
+  if (drawerProductsBtn && drawerDropdown) {
+    drawerProductsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = drawerProductsBtn.getAttribute('aria-expanded') === 'true';
+      drawerProductsBtn.setAttribute('aria-expanded', !isOpen);
+      drawerDropdown.classList.toggle('open');
+    });
   }
 
   // Mark active link

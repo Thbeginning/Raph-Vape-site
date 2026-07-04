@@ -39,8 +39,7 @@
     <div style="position:relative;">
       <button id="nav-products-btn" aria-expanded="false" aria-haspopup="true">Products ▾</button>
       <div class="nav-dropdown" id="nav-dropdown" role="menu">
-        <a href="products.html?group=all-in-one" role="menuitem">All-In-One</a>
-        <a href="products.html?group=cartridges" role="menuitem">Cartridges</a>
+        <!-- Populated dynamically by JS -->
       </div>
     </div>
     <a href="#find-us">Find Us</a>
@@ -61,34 +60,50 @@
   </div>
 </nav>
 
-<!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
   <button class="drawer-close" id="drawer-close" aria-label="Close menu">✕</button>
   <a href="index.html">Home</a>
-  <a href="products.html?group=all-in-one">All-In-One</a>
-  <a href="products.html?group=cartridges">Cartridges</a>
-  <a href="#find-us">Find Us</a>
-  <a href="#contact">Contact</a>
+  <div class="drawer-dropdown-wrapper">
+    <button class="drawer-dropdown-btn" id="drawer-products-btn" aria-expanded="false">Products ▾</button>
+    <div class="drawer-dropdown" id="drawer-dropdown">
+      <!-- Populated dynamically by JS -->
+    </div>
+  </div>
+  <a href="index.html#find-us">Find Us</a>
+  <a href="index.html#contact">Contact</a>
   <a href="cart.html">Cart</a>
 </div>
 
 <!-- HERO SECTION -->
 <section class="hero" id="hero">
   <div class="hero-bg-container" id="hero-bg-container">
-    <div class="hero-bg slide-active" style="background-image: url('Background image.jpeg');"></div>
+    <!-- VIDEO SLIDE — 1st slide -->
+    <div class="hero-bg hero-bg--video slide-active" id="hero-bg-video">
+      <video
+        id="hero-video"
+        src="Background vidoe.mp4"
+        muted
+        playsinline
+        loop
+        preload="auto"
+        aria-hidden="true"
+        class="hero-video-el"
+      ></video>
+    </div>
+    <div class="hero-bg" style="background-image: url('Background image.jpeg');"></div>
     <div class="hero-bg" style="background-image: url('Background image2.jpeg');"></div>
     <div class="hero-bg" style="background-image: url('Background image3.jpeg');"></div>
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-text-wrap" id="hero-text-wrap">
-      <div class="hero-eyebrow" id="hero-eyebrow">Premium Vaping Hardware</div>
-      <h1 class="hero-title" id="hero-title">Inhale<br/>Excellence</h1>
+      <div class="hero-eyebrow" id="hero-eyebrow">Inhale Excellence</div>
+      <h1 class="hero-title" id="hero-title">The Gold<br/>Standard</h1>
       <p class="hero-sub" id="hero-sub">Precision-engineered hardware meets the world's most refined distillates. Experience the gold standard of urban luxury.</p>
     </div>
     <div class="hero-btns">
       <a href="#products-lineup" class="btn-primary">Shop The Lineup</a>
-      <a href="#verify" class="btn-outline">Verify Product</a>
+      <a href="#" id="verify-btn" class="btn-outline">Verify Product</a>
     </div>
   </div>
 </section>
@@ -131,23 +146,58 @@
 
 <!-- INQUIRIES -->
 <section id="find-us" class="contact-section">
+  <!-- Subtle decorative glow -->
+  <div class="contact-section__glow" aria-hidden="true"></div>
   <div class="container">
     <div class="contact-grid">
+
+      <!-- LEFT: Heading + Trust Stats -->
       <div class="contact-left">
         <div class="section-label">Partnerships</div>
-        <h2 class="section-title">Wholesale &<br/>Direct Inquiries.</h2>
-        <p class="contact-desc">Experience the gold standard of urban luxury in person. Our premium hardware and refined distillates are exclusively available through our network of verified partners nationwide. For wholesale, distribution, and general inquiries, connect with our dedicated team.</p>
-        <a href="mailto:contact@muhameddispo.com" class="btn-primary" style="margin-top:28px;">Email Our Team</a>
+        <h2 class="section-title">Wholesale &amp;<br/>Direct Inquiries.</h2>
+        <p class="contact-desc">Experience the gold standard of urban luxury in person. Our premium hardware and refined distillates are exclusively available through our network of verified partners nationwide.</p>
+
+        <!-- Trust stats -->
+        <div class="contact-stats">
+          <div class="contact-stat">
+            <span class="contact-stat__num">48H</span>
+            <span class="contact-stat__label">Response Time</span>
+          </div>
+          <div class="contact-stat__divider" aria-hidden="true"></div>
+          <div class="contact-stat">
+            <span class="contact-stat__num">500+</span>
+            <span class="contact-stat__label">Partners</span>
+          </div>
+          <div class="contact-stat__divider" aria-hidden="true"></div>
+          <div class="contact-stat">
+            <span class="contact-stat__num">100%</span>
+            <span class="contact-stat__label">Verified</span>
+          </div>
+        </div>
+
+        <a href="mailto:contact@muhameddispo.com" class="btn-primary contact-cta-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email Our Team
+        </a>
       </div>
+
+      <!-- RIGHT: Two contact method cards -->
       <div class="contact-right">
+
+        <!-- Card 1: Email -->
         <div class="contact-card">
           <div class="contact-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
-          <h3 class="contact-card-title">Direct Contact</h3>
-          <p class="contact-card-text">Reach out directly for rapid support and partnership opportunities.</p>
-          <a href="mailto:contact@muhameddispo.com" class="contact-email-link">contact@muhameddispo.com</a>
+          <div class="contact-card-body">
+            <h3 class="contact-card-title">Direct Email</h3>
+            <p class="contact-card-text">For wholesale, distribution, and partnership inquiries. We respond within 48 hours.</p>
+            <a href="mailto:contact@muhameddispo.com" class="contact-email-link">contact@muhameddispo.com</a>
+          </div>
         </div>
+
+
+
       </div>
     </div>
   </div>
@@ -204,6 +254,82 @@
 
 <script src="js/supabase-client.js"></script>
 <script src="js/home.js"></script>
+
+<!-- ===== PRODUCT VERIFICATION MODAL ===== -->
+<div id="verify-modal" class="verify-modal" role="dialog" aria-modal="true" aria-labelledby="verify-modal-title">
+  <div id="verify-modal-backdrop" class="verify-modal__backdrop"></div>
+  <div class="verify-modal__panel">
+
+    <!-- Close -->
+    <button id="verify-modal-close" class="verify-modal__close" aria-label="Close verification modal">✕</button>
+
+    <!-- Header -->
+    <div class="verify-modal__header">
+      <img src="Logo.png" alt="MUHAMEDDISPO" class="verify-modal__logo" />
+      <h2 id="verify-modal-title" class="verify-modal__title">Verify Your Product</h2>
+      <p class="verify-modal__sub">Scan the QR code or enter the serial number from your product packaging to confirm authenticity.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="verify-tabs" role="tablist" aria-label="Verification method">
+      <button class="verify-tab active" id="tab-scan" role="tab" aria-selected="true" aria-controls="panel-scan">
+        <span class="verify-tab__icon">&#128247;</span> Scan QR Code
+      </button>
+      <button class="verify-tab" id="tab-manual" role="tab" aria-selected="false" aria-controls="panel-manual">
+        <span class="verify-tab__icon">&#128290;</span> Enter Code
+      </button>
+    </div>
+
+    <!-- Panel: QR Scanner -->
+    <div class="verify-tab-content active" id="panel-scan" role="tabpanel">
+      <div class="qr-scanner-wrap">
+        <video id="qr-video" class="qr-video" playsinline muted aria-hidden="true"></video>
+        <div class="qr-frame-overlay" aria-hidden="true">
+          <div class="qr-frame">
+            <span class="qr-frame__corner tl"></span>
+            <span class="qr-frame__corner tr"></span>
+            <span class="qr-frame__corner bl"></span>
+            <span class="qr-frame__corner br"></span>
+            <div class="qr-frame__scanner-line"></div>
+          </div>
+        </div>
+        <canvas id="qr-canvas" class="qr-canvas" hidden aria-hidden="true"></canvas>
+      </div>
+      <p id="qr-hint" class="qr-hint">Click below to activate your camera</p>
+      <button id="btn-start-scan" class="btn-verify-action">Start Camera</button>
+    </div>
+
+    <!-- Panel: Manual Entry -->
+    <div class="verify-tab-content" id="panel-manual" role="tabpanel">
+      <div class="verify-manual-wrap">
+        <label class="verify-label" for="serial-input">Serial / Verification Code</label>
+        <p class="verify-label-sub">Found on the holographic sticker or inside the box flap.</p>
+        <input
+          type="text"
+          id="serial-input"
+          class="verify-input"
+          placeholder="e.g. MHD-2024-DIAMOND-4829-X7K"
+          maxlength="80"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Product serial code"
+        />
+        <button id="btn-verify-manual" class="btn-verify-action">Verify Now</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div class="verify-result" id="verify-result" hidden>
+      <div class="verify-result__icon" id="verify-result-icon"></div>
+      <h3 class="verify-result__status" id="verify-result-status"></h3>
+      <div class="verify-result__details" id="verify-result-details"></div>
+      <button class="btn-verify-retry" id="btn-verify-retry" hidden>Check Another Product</button>
+    </div>
+
+    </div><!-- /.verify-modal__panel -->
+</div><!-- /#verify-modal -->
+
+<script src="js/verify.js"></script>
 </body>
 </html>
 

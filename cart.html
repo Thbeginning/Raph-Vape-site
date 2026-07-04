@@ -23,8 +23,7 @@
     <div style="position:relative;">
       <button id="nav-products-btn" aria-expanded="false" aria-haspopup="true">Products ▾</button>
       <div class="nav-dropdown" id="nav-dropdown" role="menu">
-        <a href="products.html?group=all-in-one" role="menuitem">All-In-One</a>
-        <a href="products.html?group=cartridges" role="menuitem">Cartridges</a>
+        <!-- Populated dynamically by JS -->
       </div>
     </div>
     <a href="index.html#find-us">Find Us</a>
@@ -42,11 +41,17 @@
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
-<div class="nav-drawer" id="nav-drawer" role="dialog">
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
   <button class="drawer-close" id="drawer-close" aria-label="Close menu">✕</button>
   <a href="index.html">Home</a>
-  <a href="products.html?group=all-in-one">All-In-One</a>
-  <a href="products.html?group=cartridges">Cartridges</a>
+  <div class="drawer-dropdown-wrapper">
+    <button class="drawer-dropdown-btn" id="drawer-products-btn" aria-expanded="false">Products ▾</button>
+    <div class="drawer-dropdown" id="drawer-dropdown">
+      <!-- Populated dynamically by JS -->
+    </div>
+  </div>
+  <a href="index.html#find-us">Find Us</a>
+  <a href="index.html#contact">Contact</a>
   <a href="cart.html">Cart</a>
 </div>
 

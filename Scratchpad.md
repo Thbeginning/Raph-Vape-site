@@ -1,0 +1,22 @@
+# Study Muhamed's Website Task Checklist
+
+- [ ] Open homepage (https://www.muhameds.com/) and handle any initial gates/popups
+- [ ] Analyze Homepage Layout:
+    - [ ] Hero section
+    - [ ] Navigation menu structure
+    - [ ] Product categories section
+    - [ ] Color scheme, fonts, spacing
+    - [ ] Footer and store locator
+- [ ] Capture screenshots of Homepage (Hero, Categories, Footer, etc.)
+- [ ] Navigate to /products/all-in-one and analyze:
+    - [ ] How products are grouped/sub-categories (Melted Diamonds, Live Resin, Hash Rosin)
+    - [ ] Product cards layout, styling, hover effects
+    - [ ] Information displayed (name, description, price, image)
+- [ ] Capture screenshots of /products/all-in-one (sub-groups, cards)
+- [ ] Click a product to view detail modal/page:
+    - [ ] Analyze product detail/modal layout and content
+    - [ ] Capture screenshot of product detail/modal
+- [ ] Navigate to /products/cartridges (if it exists) and analyze:
+    - [ ] Sub-categories, cards, layout
+    - [ ] Capture screenshots of cartridges page
+- [ ] Document final findings and report back

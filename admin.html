@@ -82,6 +82,9 @@
       <button class="admin-nav-item active" id="tab-groups-btn" onclick="switchTab('groups')">
         📦 Product Groups
       </button>
+      <button class="admin-nav-item" id="tab-wholesale-btn" onclick="switchTab('wholesale')">
+        🏷️ Wholesale
+      </button>
       <button class="admin-nav-item" id="tab-products-btn" onclick="switchTab('products')">
         🧪 All Products
       </button>
@@ -115,6 +118,27 @@
         <div id="groups-list">
           <div class="skeleton" style="height:80px;border-radius:10px;margin-bottom:12px;"></div>
           <div class="skeleton" style="height:80px;border-radius:10px;margin-bottom:12px;"></div>
+        </div>
+      </div>
+
+      <!-- WHOLESALE TAB -->
+      <div class="tab-panel" id="tab-wholesale">
+        <div class="admin-card">
+          <table class="admin-table" id="wholesale-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Strain</th>
+                <th>Options</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="wholesale-body">
+              <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -246,6 +270,7 @@
     <form id="product-form" novalidate>
       <input type="hidden" id="pf-id"/>
       <input type="hidden" id="pf-subgroup-id"/>
+      <input type="hidden" id="pf-group-id"/>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label" for="pf-name">Product Name *</label>
@@ -266,14 +291,33 @@
             <option value="cbd">CBD</option>
           </select>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="pf-price-group">
           <label class="form-label" for="pf-price">Price ($) *</label>
           <input type="number" id="pf-price" class="form-input" placeholder="35.00" min="0" max="9999" step="0.01" required/>
         </div>
       </div>
+      
+      <div id="pf-wholesale-wrap" style="display:none; background:rgba(197,179,111,0.05); border:1px solid var(--border-gold); border-radius:8px; padding:16px; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <label class="form-label" style="margin:0;">Wholesale Options</label>
+          <button type="button" class="btn-outline" id="btn-add-option" style="padding:4px 10px; font-size:10px;">+ Add Option</button>
+        </div>
+        <div id="wholesale-options-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
       <div class="form-group">
         <label class="form-label" for="pf-desc">Description</label>
         <textarea id="pf-desc" class="form-textarea" placeholder="Product description…" maxlength="1000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pf-ingredients">Ingredients</label>
+        <textarea id="pf-ingredients" class="form-textarea" placeholder="E.g., Premium cannabis distillate, naturally derived botanical terpenes..." maxlength="1000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lab Results (PDF)</label>
+        <div class="form-upload-area" id="pf-lab-area" onclick="document.getElementById('pf-lab-file').click()">
+          <input type="file" id="pf-lab-file" accept="application/pdf" aria-label="Upload lab results PDF"/>
+          <div id="pf-lab-preview-wrap">Click to upload lab results (PDF · max 5MB)</div>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Product Image</label>
@@ -297,7 +341,7 @@
       </div>
       <div class="form-actions">
         <button type="button" class="btn-cancel" onclick="closeModal('product-modal')">Cancel</button>
-        <button type="submit" class="btn-submit" id="pf-submit">Save Product</button>
+        <button type="button" class="btn-submit" id="pf-submit" onclick="saveProduct()">Save Product</button>
       </div>
     </form>
   </div>
@@ -315,7 +359,7 @@
   </div>
 </div>
 
-<script src="js/supabase-client.js"></script>
-<script src="js/admin.js"></script>
+<script src="js/supabase-client.js?v=8"></script>
+<script src="js/admin-latest.js"></script>
 </body>
 </html>
