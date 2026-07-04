@@ -299,15 +299,15 @@ async function handleCheckoutSubmit() {
 
     const orderId = savedOrder?.id ? savedOrder.id.toString().substring(0, 8).toUpperCase() : Math.random().toString(36).substring(2, 10).toUpperCase();
 
-    // Attempt to send email via Netlify function (if deployed)
+    // Send email via Vercel serverless function (calls Resend API securely)
     try {
-      await fetch('/.netlify/functions/send-invoice', {
+      await fetch('/api/send-invoice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...orderData, orderId }),
       });
     } catch (_) {
-      // Netlify function not available locally — order still saved
+      // Function unavailable in local dev — order still saved to DB
     }
 
     // Clear cart
