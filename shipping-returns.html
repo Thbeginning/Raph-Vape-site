@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shipping & Returns — MUHAMEDDISPO</title>
+  <meta name="description" content="Shipping, returns, and exchange policy for MUHAMEDDISPO."/>
+  <meta name="theme-color" content="#0a0a0a"/>
+  <!-- CSP: TODO(security) — tighten nonce-based CSP when deploying to a server -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://fujlhixdfdltretlplxl.supabase.co; img-src 'self' https://fujlhixdfdltretlplxl.supabase.co data: blob:; media-src 'self' https://fujlhixdfdltretlplxl.supabase.co blob:; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" integrity="sha256-lid+wA4Z30dtc5aoolhrQe0QM9z2gPWqebDFVgWXkrg=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" aria-label="Primary navigation">
+  <a href="index.html" class="nav-brand">
+    <img src="Logo.png" alt="MUHAMEDDISPO" class="nav-logo" style="height: 100px; margin-bottom: 12px;" />
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Home</a>
+    <div style="position:relative;">
+      <button id="nav-products-btn" aria-expanded="false" aria-haspopup="true">Products ▾</button>
+      <div class="nav-dropdown" id="nav-dropdown" role="menu">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+    <a href="index.html#find-us">Find Us</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a href="cart.html" class="nav-cart-btn" id="nav-cart" aria-label="Shopping cart">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="cart-icon">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <span class="cart-count" id="cart-count" aria-live="polite"></span>
+    </a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
+  <button class="drawer-close" id="drawer-close" aria-label="Close menu">✕</button>
+  <a href="index.html">Home</a>
+  <div class="drawer-dropdown-wrapper">
+    <button class="drawer-dropdown-btn" id="drawer-products-btn" aria-expanded="false">Products ▾</button>
+    <div class="drawer-dropdown" id="drawer-dropdown">
+      <!-- Populated dynamically by JS -->
+    </div>
+  </div>
+  <a href="index.html#find-us">Find Us</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="cart.html">Cart</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div style="padding:160px 20px 60px; text-align:center; background:linear-gradient(to bottom, #0a0a0a, var(--bg-page)); border-bottom:1px solid var(--border-gold);">
+  <h1 class="section-title">Shipping & Returns</h1>
+  <p style="color:var(--gold); font-size:14px; text-transform:uppercase; letter-spacing:2px; margin-top:8px;">Customer Support</p>
+</div>
+
+<!-- CONTENT SECTION -->
+<main style="max-width:800px; margin:0 auto; padding:60px 20px 100px;">
+  
+  <div style="background:rgba(197, 179, 111, 0.03); border:1px solid rgba(197, 179, 111, 0.15); border-radius:16px; padding:40px; margin-bottom:40px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+    <h2 style="color:var(--gold); font-family:var(--font-heading); text-transform:uppercase; letter-spacing:2px; margin-bottom:24px; font-size:24px; border-bottom:1px solid var(--border-gold); padding-bottom:12px;">Returns</h2>
+    <p style="color:var(--text-muted); font-size:16px; line-height:1.8; margin-bottom:0;">
+      You may return new, unused, and unopened products within <strong>30 days of delivery</strong> for a full refund, however, we do ask that you pay shipping for these returns. If the return is a result of our error, such as if you receive an incorrect or defective product, you will receive a full refund for the item as well as shipping costs.
+    </p>
+  </div>
+
+  <div style="background:rgba(197, 179, 111, 0.03); border:1px solid rgba(197, 179, 111, 0.15); border-radius:16px; padding:40px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+    <h2 style="color:var(--gold); font-family:var(--font-heading); text-transform:uppercase; letter-spacing:2px; margin-bottom:24px; font-size:24px; border-bottom:1px solid var(--border-gold); padding-bottom:12px;">Exchanges & Refunds</h2>
+    <p style="color:var(--text-muted); font-size:16px; line-height:1.8; margin-bottom:20px;">
+      We only refund money if the product is defective or wrong item was sent.
+    </p>
+    <p style="color:var(--text-muted); font-size:16px; line-height:1.8; margin-bottom:20px;">
+      You should expect to receive your refund within two weeks of giving your package to the return shipper; however, you will receive your money much more quickly in many cases.
+    </p>
+    <p style="color:var(--text-muted); font-size:16px; line-height:1.8; margin-bottom:20px;">
+      This time period allows for the transit time for us to receive your return from the shipper (3 to 5 business days), the time it takes us to process your return once we receive it (2 to 4 business days), as well as the time it takes your bank to process our refund request (5 to 10 business days).
+    </p>
+    <div style="background:rgba(0,0,0,0.3); padding:20px; border-left:3px solid var(--gold); border-radius:4px; margin-top:30px;">
+      <p style="color:#fff; font-size:15px; line-height:1.7; margin-bottom:0;">
+        If for any reason you do not receive your refund after 14 days, please contact us at <a href="mailto:contact@muhameddispo.com" style="color:var(--gold); text-decoration:none; font-weight:bold;">contact@muhameddispo.com</a> and let us know. We will do everything in our power to resolve the issue immediately.
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <img src="Logo.png" alt="MUHAMEDDISPO" class="nav-logo" style="height: 100px; margin-bottom: 12px;" />
+      </div>
+      <p class="footer-tagline">Elevating the standard of lifestyle hardware and distillates.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Shop</div>
+      <a href="products.html?group=all-in-one">All-In-One</a>
+      <a href="products.html?group=cartridges">Cartridges</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <a href="index.html#brand-story">Our Story</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="shipping-returns.html">Shipping & Returns</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Find Us</div>
+      <p style="font-size:13px; color:var(--text-muted); line-height:1.6;">Available in authorized dispensaries nationwide.</p>
+      <a href="index.html#find-us" style="margin-top:12px; display:inline-block;">Store Locator</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 MUHAMEDDISPO. All rights reserved.</span>
+    <span>21+ Only</span>
+  </div>
+</footer>
+
+<script src="js/supabase-client.js?v=8"></script>
+</body>
+</html>
