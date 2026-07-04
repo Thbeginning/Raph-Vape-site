@@ -2726,3 +2726,72 @@ footer {
   .checkout-success { padding: 40px 20px; }
   .payment-card__inner { padding: 12px 14px; gap: 12px; }
 }
+
+/* =========================================
+   ENHANCED BRAND STORY SECTION
+   ========================================= */
+.brand-story {
+  position: relative;
+  padding: 100px 0;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+}
+
+.brand-story-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.story-content-left {
+  animation: fadeInStep 0.5s ease forwards;
+}
+
+.story-content-right {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.story-pillar {
+  background: rgba(20,20,20,0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(197,179,111,0.15);
+  padding: 24px 32px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.story-pillar:hover {
+  background: rgba(197,179,111,0.05);
+  border-color: rgba(197,179,111,0.4);
+  transform: translateY(-4px);
+}
+
+.story-pillar-title {
+  font-family: var(--font-head);
+  font-size: 18px;
+  color: var(--gold);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.story-pillar-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #aaa;
+}
+
+@media (max-width: 900px) {
+  .brand-story-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
