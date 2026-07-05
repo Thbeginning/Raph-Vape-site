@@ -6,7 +6,7 @@
   <title id="page-title">Product · MUHAMEDDISPO</title>
   <meta name="description" id="page-desc" content="Premium vape product from MUHAMEDDISPO."/>
   <meta name="theme-color" content="#0a0a0a"/>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://fujlhixdfdltretlplxl.supabase.co; img-src 'self' https://fujlhixdfdltretlplxl.supabase.co data: blob:; media-src 'self' https://fujlhixdfdltretlplxl.supabase.co blob:; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; frame-ancestors 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://fujlhixdfdltretlplxl.supabase.co https://*.tawk.to wss://*.tawk.to; img-src 'self' https://fujlhixdfdltretlplxl.supabase.co data: blob: https://*.tawk.to; media-src 'self' https://fujlhixdfdltretlplxl.supabase.co blob: https://*.tawk.to; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://*.tawk.to; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.tawk.to; font-src 'self' https://fonts.gstatic.com https://*.tawk.to; connect-src 'self' https://fujlhixdfdltretlplxl.supabase.co https://*.tawk.to wss://*.tawk.to; frame-src 'self' https://*.tawk.to; frame-ancestors 'none';">
   <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
   <link rel="stylesheet" href="css/style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"
@@ -110,6 +110,54 @@
 
 <script src="js/supabase-client.js?v=8"></script>
 <script src="js/product-detail-latest.js"></script>
+<style>
+.potato-widget {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9999;
+  width: 60px;
+  height: 60px;
+  background-color: #4B8BF5;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.potato-widget:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+.potato-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #F15F22;
+  color: #FFF;
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000;
+}
+</style>
+<a href="https://tatokdym.org/muhamedssdisposables" target="_blank" rel="noopener noreferrer" class="potato-widget" aria-label="Chat on Potato">
+  <div class="potato-badge">4</div>
+  <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25,50 A25,25 0 1,1 75,50 A25,25 0 0,1 55,70 L45,80 L45,70 A25,25 0 0,1 25,50 Z" fill="none" stroke="#FFF" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M57,35 C57,35 68,28 68,28 C68,28 61,39 61,39 L43,57 L36,50 Z" fill="#FFF"/>
+    <path d="M36,50 L28,57 L34,61 Z" fill="#FFF"/>
+    <path d="M43,57 L49,63 L45,67 Z" fill="#FFF"/>
+  </svg>
+</a>
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
