@@ -481,15 +481,18 @@ async function loadWholesaleProducts() {
     const { data: products, error } = await query;
     if (error) throw error;
 
-    // Filter to only products with wholesale_options
-    const filtered = products.filter(p => p.wholesale_options && p.wholesale_options.length > 0);
+    // Filter: wholesale products = have options OR were saved with price=0 (wholesale marker)
+    const filtered = products.filter(p =>
+      (p.wholesale_options && p.wholesale_options.length > 0) ||
+      (p.price === 0 && p.subgroup_id === null && p.group_id === null)
+    );
 
     if (!filtered.length) {
       const tr = document.createElement('tr');
       const td = document.createElement('td');
       td.colSpan = 6;
-      td.style.cssText = 'text-align:center;padding:40px;color:var(--text-muted);';
-      td.textContent = 'No wholesale products found.';
+      td.style.cssText = 'text-align:center;padding:40px;color:var(--text-muted);font-size:14px;';
+      td.textContent = 'No wholesale products found. Click \'+ New Wholesale Product\' to add one.';
       tr.appendChild(td);
       tbody.appendChild(tr);
       return;
@@ -1054,6 +1057,9 @@ async function saveProduct() {
       .filter(o => o.label && String(o.label).trim() !== '')
       .map(o => ({ label: String(o.label).trim(), price: parseFloat(o.price) || 0 }));
 
+    // Determine if this is a wholesale product
+    const isWholesaleProduct = document.getElementById('pf-wholesale-wrap').style.display !== 'none';
+
     if (!name) {
       showToast('Product name is required.', 'error');
       btn.disabled = false; btn.textContent = 'Save Product';
@@ -1066,6 +1072,12 @@ async function saveProduct() {
     }
     if (!['sativa', 'indica', 'hybrid', 'cbd'].includes(strain_type)) {
       showToast('Invalid strain type.', 'error');
+      btn.disabled = false; btn.textContent = 'Save Product';
+      return;
+    }
+    // Require at least 1 option for wholesale products
+    if (isWholesaleProduct && wholesale_options.length === 0) {
+      showToast('Please add at least one wholesale option (e.g. "10 Carts") before saving.', 'error');
       btn.disabled = false; btn.textContent = 'Save Product';
       return;
     }

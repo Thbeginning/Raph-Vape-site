@@ -43,9 +43,10 @@ async function loadProductsPage(slug) {
       const sb = getSupabase();
       const { data: products } = await sb.from('products').select('*').order('sort_order');
       
-      const wholesaleProducts = products.filter(p => 
-        (p.wholesale_options && p.wholesale_options.length > 0) || 
-        p.group_id === group.id
+      const wholesaleProducts = products.filter(p =>
+        (p.wholesale_options && p.wholesale_options.length > 0) ||
+        p.group_id === group.id ||
+        (p.price === 0 && p.subgroup_id === null && p.group_id === null)
       );
       
       const mockSubgroup = { slug: group.slug, name: group.name, description: group.description };
