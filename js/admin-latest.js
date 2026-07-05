@@ -902,9 +902,11 @@ async function uploadFile(file, bucket, folder) {
   }
   const filename = folder + '/' + uuid + '.' + ext;
 
-  // Add a 15-second timeout to prevent infinite hanging
+  // Timeout: 180s for videos (up to 50MB), 30s for images/PDFs
+  const isVideo = file.type.startsWith('video/');
+  const timeoutMs = isVideo ? 180000 : 30000;
   const timeoutPromise = new Promise((_, reject) => 
-    setTimeout(() => reject(new Error("Upload timed out after 15 seconds. Please try a smaller image or check your connection.")), 15000)
+    setTimeout(() => reject(new Error(`Upload timed out after ${timeoutMs / 1000} seconds. Please check your connection or try a smaller file.`)), timeoutMs)
   );
 
   const uploadPromise = sb.storage.from(bucket).upload(filename, file, {
@@ -960,25 +962,48 @@ function initForms() {
 
       if (!name || !slug) { showToast('Name and slug are required.', 'error'); return; }
 
-      let hero_image_url = null;
-      let video_url = null;
+      const sb = getSupabase();
+
+      // Fetch existing record so we can preserve URLs that aren't being replaced
+      let existingRecord = {};
+      if (id) {
+        const { data: existing } = await sb.from('product_groups').select('hero_image_url, video_url').eq('id', id).single();
+        if (existing) existingRecord = existing;
+      }
 
       const imgFile = document.getElementById('gf-img-file').files[0];
+      let hero_image_url = existingRecord.hero_image_url || null;
       if (imgFile) {
-        if (!validateFile(imgFile, ['image/jpeg','image/png','image/webp'], 5)) return;
+        if (!validateFile(imgFile, ['image/jpeg','image/png','image/webp'], 5)) {
+          btn.disabled = false; btn.textContent = 'Save Group';
+          return;
+        }
+        btn.textContent = 'Uploading image…';
         hero_image_url = await uploadFile(imgFile, 'hero-images', 'groups');
       }
 
       const vidFile = document.getElementById('gf-vid-file').files[0];
+      let video_url = existingRecord.video_url || null;
       if (vidFile) {
-        if (!validateFile(vidFile, ['video/mp4','video/webm'], 50)) return;
-        video_url = await uploadFile(vidFile, 'product-videos', 'groups');
+        if (!validateFile(vidFile, ['video/mp4','video/webm'], 50)) {
+          btn.disabled = false; btn.textContent = 'Save Group';
+          return;
+        }
+        // Show progress feedback — video uploads can take a while
+        btn.textContent = 'Uploading video… (may take up to 3 min)';
+        try {
+          video_url = await uploadFile(vidFile, 'product-videos', 'groups');
+        } catch (uploadErr) {
+          showToast('Video upload failed: ' + (uploadErr?.message || 'unknown error'), 'error');
+          btn.disabled = false; btn.textContent = 'Save Group';
+          return;
+        }
       }
 
-      const sb = getSupabase();
       const payload = { name, slug, tagline, description, sort_order };
-      if (hero_image_url) payload.hero_image_url = hero_image_url;
-      if (video_url) payload.video_url = video_url;
+      // Always include both URLs (null is allowed and clears them)
+      payload.hero_image_url = hero_image_url;
+      payload.video_url = video_url;
 
       let error;
       if (id) {
@@ -989,12 +1014,12 @@ function initForms() {
       if (error) throw error;
 
       closeModal('group-modal');
-      showToast('Group saved!', 'success');
+      showToast('Group saved! ✓', 'success');
       await loadGroupsTab();
       await populateGroupFilter();
     } catch (err) {
-      console.error('Group save error');
-      showToast('Failed to save group.', 'error');
+      console.error('Group save error:', err);
+      showToast('Failed to save group: ' + (err?.message || 'unknown error').substring(0, 100), 'error');
     } finally {
       btn.disabled = false; btn.textContent = 'Save Group';
     }
