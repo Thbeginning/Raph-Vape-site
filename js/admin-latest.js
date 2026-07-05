@@ -1134,11 +1134,17 @@ async function saveProduct() {
     if (image_url) payload.image_url = image_url;
     if (lab_result_url) payload.lab_result_url = lab_result_url;
 
-    let error;
+    console.log("Saving payload to Supabase:", payload);
+
+    let error, data;
     if (id) {
-      ({ error } = await sb.from('products').update(payload).eq('id', id));
+      // Add .select() so we can verify the row was actually updated
+      ({ data, error } = await sb.from('products').update(payload).eq('id', id).select());
+      if (!error && (!data || data.length === 0)) {
+        error = { message: "Update blocked by database security policies (RLS). Please check your Supabase SQL policies." };
+      }
     } else {
-      ({ error } = await sb.from('products').insert(payload));
+      ({ data, error } = await sb.from('products').insert(payload).select());
     }
 
     if (error) {
@@ -1147,6 +1153,8 @@ async function saveProduct() {
       btn.disabled = false; btn.textContent = 'Save Product';
       return;
     }
+
+    console.log("Saved successfully:", data);
 
     closeModal('product-modal');
     showToast('Product saved! ✓', 'success');
