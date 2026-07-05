@@ -892,7 +892,7 @@ function validateFile(file, allowedTypes, maxMB) {
 async function uploadFile(file, bucket, folder) {
   const sb = getSupabase();
   const ext = file.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
-  
+
   // Fallback for crypto.randomUUID() if not on HTTPS
   let uuid;
   try {
@@ -902,23 +902,41 @@ async function uploadFile(file, bucket, folder) {
   }
   const filename = folder + '/' + uuid + '.' + ext;
 
+  console.log(`[UPLOAD] Starting upload to bucket="${bucket}" path="${filename}" size=${file.size} type=${file.type}`);
+
   // Timeout: 180s for videos (up to 50MB), 30s for images/PDFs
   const isVideo = file.type.startsWith('video/');
   const timeoutMs = isVideo ? 180000 : 30000;
-  const timeoutPromise = new Promise((_, reject) => 
-    setTimeout(() => reject(new Error(`Upload timed out after ${timeoutMs / 1000} seconds. Please check your connection or try a smaller file.`)), timeoutMs)
-  );
 
-  const uploadPromise = sb.storage.from(bucket).upload(filename, file, {
-    cacheControl: '3600',
-    upsert: false,
-    contentType: file.type || 'application/octet-stream',
+  // Wrap the Supabase upload in a plain promise so Promise.race works correctly
+  const uploadPromise = new Promise(async (resolve, reject) => {
+    try {
+      const result = await sb.storage.from(bucket).upload(filename, file, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type || 'application/octet-stream',
+      });
+      console.log('[UPLOAD] Raw result from Supabase storage:', JSON.stringify(result));
+      if (result.error) {
+        reject(result.error);
+      } else {
+        resolve(result.data);
+      }
+    } catch (err) {
+      console.error('[UPLOAD] Exception during upload:', err);
+      reject(err);
+    }
   });
 
-  const { data, error } = await Promise.race([uploadPromise, timeoutPromise]);
-  if (error) throw error;
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error(`Upload timed out after ${timeoutMs / 1000}s. Try a smaller file or check your connection.`)), timeoutMs)
+  );
+
+  // Race: upload vs timeout — both are plain Promises now
+  await Promise.race([uploadPromise, timeoutPromise]);
 
   const { data: { publicUrl } } = sb.storage.from(bucket).getPublicUrl(filename);
+  console.log('[UPLOAD] Success. Public URL:', publicUrl);
   return publicUrl;
 }
 
