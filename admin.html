@@ -382,11 +382,206 @@
     <div style="display:flex;gap:12px;justify-content:center;">
       <button class="btn-cancel" onclick="closeModal('delete-modal')">Cancel</button>
       <button class="btn-submit" id="delete-confirm-btn" style="background:#c0392b;">Delete</button>
+            </thead>
+            <tbody id="orders-body">
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Loading orders…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ====================== MODALS ====================== -->
+
+<!-- GROUP MODAL -->
+<div class="modal-overlay" id="group-modal" role="dialog" aria-modal="true" aria-label="Product Group">
+  <div class="modal">
+    <h2 class="modal-title" id="group-modal-title">New Product Group</h2>
+    <button class="modal-close" onclick="closeModal('group-modal')" aria-label="Close">✕</button>
+    <form id="group-form" novalidate>
+      <input type="hidden" id="gf-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="gf-name">Group Name *</label>
+          <input type="text" id="gf-name" class="form-input" placeholder="All-In-One" maxlength="100" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="gf-slug">URL Slug *</label>
+          <input type="text" id="gf-slug" class="form-input" placeholder="all-in-one" maxlength="80" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="gf-tagline">Tagline</label>
+        <input type="text" id="gf-tagline" class="form-input" placeholder="Disposable done right" maxlength="200"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="gf-desc">Description</label>
+        <textarea id="gf-desc" class="form-textarea" placeholder="Full product group description…" maxlength="1000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hero Image</label>
+        <div class="form-upload-area" id="gf-img-area" onclick="document.getElementById('gf-img-file').click()">
+          <input type="file" id="gf-img-file" accept="image/jpeg,image/png,image/webp" aria-label="Upload hero image"/>
+          <div id="gf-img-preview-wrap">Click to upload image (JPEG, PNG, WebP · max 5MB)</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">360° Video</label>
+        <div class="form-upload-area" id="gf-vid-area" onclick="document.getElementById('gf-vid-file').click()">
+          <input type="file" id="gf-vid-file" accept="video/mp4,video/webm" aria-label="Upload product video"/>
+          <div id="gf-vid-preview-wrap">Click to upload video (MP4, WebM · max 50MB)</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="gf-order">Sort Order</label>
+          <input type="number" id="gf-order" class="form-input" value="0" min="0" max="999"/>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal('group-modal')">Cancel</button>
+        <button type="submit" class="btn-submit" id="gf-submit">Save Group</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- SUBGROUP MODAL -->
+<div class="modal-overlay" id="subgroup-modal" role="dialog" aria-modal="true" aria-label="Product Subgroup">
+  <div class="modal">
+    <h2 class="modal-title" id="sg-modal-title">New Subgroup</h2>
+    <button class="modal-close" onclick="closeModal('subgroup-modal')" aria-label="Close">✕</button>
+    <form id="subgroup-form" novalidate>
+      <input type="hidden" id="sgf-id"/>
+      <input type="hidden" id="sgf-group-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="sgf-name">Subgroup Name *</label>
+          <input type="text" id="sgf-name" class="form-input" placeholder="Melted Diamonds" maxlength="100" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="sgf-slug">URL Slug *</label>
+          <input type="text" id="sgf-slug" class="form-input" placeholder="melted-diamonds" maxlength="80" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="sgf-desc">Description</label>
+        <textarea id="sgf-desc" class="form-textarea" placeholder="Subgroup description…" maxlength="800"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="sgf-order">Sort Order</label>
+        <input type="number" id="sgf-order" class="form-input" value="0" min="0" max="999"/>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal('subgroup-modal')">Cancel</button>
+        <button type="submit" class="btn-submit" id="sgf-submit">Save Subgroup</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal" role="dialog" aria-modal="true" aria-label="Product">
+  <div class="modal">
+    <h2 class="modal-title" id="pf-modal-title">New Product</h2>
+    <button class="modal-close" onclick="closeModal('product-modal')" aria-label="Close">✕</button>
+    <form id="product-form" novalidate>
+      <input type="hidden" id="pf-id"/>
+      <input type="hidden" id="pf-subgroup-id"/>
+      <input type="hidden" id="pf-group-id"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="pf-name">Product Name *</label>
+          <input type="text" id="pf-name" class="form-input" placeholder="Durban Delight" maxlength="150" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pf-slug">URL Slug *</label>
+          <input type="text" id="pf-slug" class="form-input" placeholder="durban-delight" maxlength="100" required/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="pf-strain">Strain Type</label>
+          <select id="pf-strain" class="form-select">
+            <option value="hybrid">Hybrid</option>
+            <option value="sativa">Sativa</option>
+            <option value="indica">Indica</option>
+            <option value="cbd">CBD</option>
+          </select>
+        </div>
+        <div class="form-group" id="pf-price-group">
+          <label class="form-label" for="pf-price">Price ($) *</label>
+          <input type="number" id="pf-price" class="form-input" placeholder="35.00" min="0" max="9999" step="0.01" required/>
+        </div>
+      </div>
+      
+      <div id="pf-wholesale-wrap" style="display:none; background:rgba(197,179,111,0.05); border:1px solid var(--border-gold); border-radius:8px; padding:16px; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <label class="form-label" style="margin:0;">Wholesale Options <span style="color:#e55;font-size:11px;">* Required</span></label>
+          <button type="button" class="btn-outline" id="btn-add-option" style="padding:4px 10px; font-size:10px;">+ Add Option</button>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">Add at least one option with a label (e.g. "10 Carts") and a price. You must add at least one option to save.</p>
+        <div id="wholesale-options-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pf-desc">Description</label>
+        <textarea id="pf-desc" class="form-textarea" placeholder="Product description…" maxlength="1000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="pf-ingredients">Ingredients</label>
+        <textarea id="pf-ingredients" class="form-textarea" placeholder="E.g., Premium cannabis distillate, naturally derived botanical terpenes..." maxlength="1000"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lab Results (PDF)</label>
+        <div class="form-upload-area" id="pf-lab-area" onclick="document.getElementById('pf-lab-file').click()">
+          <input type="file" id="pf-lab-file" accept="application/pdf" aria-label="Upload lab results PDF"/>
+          <div id="pf-lab-preview-wrap">Click to upload lab results (PDF · max 5MB)</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Product Image</label>
+        <div class="form-upload-area" id="pf-img-area" onclick="document.getElementById('pf-img-file').click()">
+          <input type="file" id="pf-img-file" accept="image/jpeg,image/png,image/webp" aria-label="Upload product image"/>
+          <div id="pf-img-preview-wrap">Click to upload image (JPEG, PNG, WebP · max 5MB)</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="pf-order">Sort Order</label>
+          <input type="number" id="pf-order" class="form-input" value="0" min="0" max="999"/>
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:12px;margin-top:28px;">
+          <label class="toggle" for="pf-stock">
+            <input type="checkbox" id="pf-stock" checked/>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="form-label" style="margin:0;">In Stock</span>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal('product-modal')">Cancel</button>
+        <button type="button" class="btn-submit" id="pf-submit" onclick="saveProduct()">Save Product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delete-modal" role="dialog" aria-modal="true" aria-label="Confirm deletion">
+  <div class="modal" style="max-width:400px;text-align:center;">
+    <h2 class="modal-title" style="margin-bottom:12px;">Delete Item?</h2>
+    <p id="delete-msg" style="color:var(--text-muted);font-size:14px;margin-bottom:28px;"></p>
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <button class="btn-cancel" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn-submit" id="delete-confirm-btn" style="background:#c0392b;">Delete</button>
     </div>
   </div>
 </div>
 
 <script src="js/supabase-client.js?v=8"></script>
-<script src="js/admin-latest.js?v=20260705"></script>
+<script src="js/admin-latest.js?v=20260705_2"></script>
 </body>
 </html>

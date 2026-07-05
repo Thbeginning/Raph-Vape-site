@@ -891,15 +891,29 @@ function validateFile(file, allowedTypes, maxMB) {
 
 async function uploadFile(file, bucket, folder) {
   const sb = getSupabase();
-  // Generate UUID-based filename to prevent traversal/guessing
   const ext = file.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '');
-  const filename = folder + '/' + crypto.randomUUID() + '.' + ext;
+  
+  // Fallback for crypto.randomUUID() if not on HTTPS
+  let uuid;
+  try {
+    uuid = crypto.randomUUID();
+  } catch (e) {
+    uuid = Math.random().toString(36).substring(2) + Date.now().toString(36);
+  }
+  const filename = folder + '/' + uuid + '.' + ext;
 
-  const { data, error } = await sb.storage.from(bucket).upload(filename, file, {
+  // Add a 15-second timeout to prevent infinite hanging
+  const timeoutPromise = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error("Upload timed out after 15 seconds. Please try a smaller image or check your connection.")), 15000)
+  );
+
+  const uploadPromise = sb.storage.from(bucket).upload(filename, file, {
     cacheControl: '3600',
     upsert: false,
-    contentType: file.type,
+    contentType: file.type || 'application/octet-stream',
   });
+
+  const { data, error } = await Promise.race([uploadPromise, timeoutPromise]);
   if (error) throw error;
 
   const { data: { publicUrl } } = sb.storage.from(bucket).getPublicUrl(filename);
