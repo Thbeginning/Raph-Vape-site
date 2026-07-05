@@ -31,9 +31,25 @@ async function loadProductsPage(slug) {
     }
     
     renderCategoryHero(group);
-    document.title = group.name + ' · MUHAMEDDISPO';
-    const metaDesc = document.getElementById('page-desc');
-    if (metaDesc) metaDesc.setAttribute('content', group.description || '');
+
+    // === DYNAMIC SEO META UPDATE ===
+    const pageTitle = group.name + ' — Premium Vape Products · MUHAMEDDISPO';
+    const pageDesc = group.description
+      ? group.description.substring(0, 160)
+      : 'Shop ' + group.name + ' premium vape products from MUHAMEDDISPO — the gold standard of urban luxury.';
+    const pageUrl = 'https://muhameddispo.com/products.html?group=' + encodeURIComponent(slug);
+
+    document.title = pageTitle;
+    const setMeta = (id, attr, val) => { const el = document.getElementById(id); if (el) el.setAttribute(attr, val); };
+    const setMetaN = (name, val) => { const el = document.querySelector('meta[name="' + name + '"]'); if (el) el.setAttribute('content', val); };
+    setMeta('page-desc', 'content', pageDesc);
+    setMeta('page-canonical', 'href', pageUrl);
+    setMeta('og-title', 'content', pageTitle);
+    setMeta('og-desc', 'content', pageDesc);
+    setMeta('og-url', 'content', pageUrl);
+    setMeta('tw-title', 'content', pageTitle);
+    setMeta('tw-desc', 'content', pageDesc);
+    // === END SEO META UPDATE ===
 
     const container = document.getElementById('subgroups-container');
     container.replaceChildren();

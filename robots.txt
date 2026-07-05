@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /cart.html
+
+Sitemap: https://muhameddispo.com/sitemap.xml

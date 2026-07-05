@@ -34,12 +34,67 @@ function renderProduct(product) {
   const sg = product.product_subgroups;
   const group = sg ? sg.product_groups : null;
 
-  // Page title
-  document.title = product.name + ' · MUHAMEDDISPO';
-  const metaDesc = document.getElementById('page-desc');
-  if (metaDesc) metaDesc.setAttribute('content', product.description || '');
+  // === DYNAMIC SEO META UPDATE ===
+  const pageTitle = product.name + ' — ' + (sg ? sg.name + ' · ' : '') + 'MUHAMEDDISPO';
+  const pageDesc = product.description
+    ? product.description.substring(0, 160)
+    : 'Buy ' + product.name + ' from MUHAMEDDISPO — premium ' + (sg ? sg.name : 'vape') + ' product.';
+  const pageUrl = 'https://muhameddispo.com/product-detail.html?id=' + encodeURIComponent(product.id);
+  const pageImage = product.image_url || 'https://muhameddispo.com/Logo.png';
 
-  // Breadcrumb
+  document.title = pageTitle;
+  const setMetaId = (id, attr, val) => { const el = document.getElementById(id); if (el) el.setAttribute(attr, val); };
+  setMetaId('page-desc', 'content', pageDesc);
+  setMetaId('page-canonical', 'href', pageUrl);
+  setMetaId('og-title', 'content', pageTitle);
+  setMetaId('og-desc', 'content', pageDesc);
+  setMetaId('og-image', 'content', pageImage);
+  setMetaId('og-url', 'content', pageUrl);
+  setMetaId('tw-title', 'content', pageTitle);
+  setMetaId('tw-desc', 'content', pageDesc);
+  setMetaId('tw-image', 'content', pageImage);
+
+  // === PRODUCT SCHEMA (JSON-LD) — unlocks Google rich results ===
+  const isWholesaleSchema = product.wholesale_options && product.wholesale_options.length > 0;
+  const priceForSchema = isWholesaleSchema
+    ? Math.min(...product.wholesale_options.map(o => o.price))
+    : (product.price || 0);
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: pageImage,
+    description: product.description || '',
+    brand: { '@type': 'Brand', name: 'MUHAMEDDISPO' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: priceForSchema.toFixed(2),
+      availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Organization', name: 'MUHAMEDDISPO' }
+    }
+  };
+  // BreadcrumbList schema
+  const breadcrumbItems = [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://muhameddispo.com/' }
+  ];
+  if (group) breadcrumbItems.push({ '@type': 'ListItem', position: 2, name: group.name, item: 'https://muhameddispo.com/products.html?group=' + encodeURIComponent(group.slug) });
+  if (sg)    breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: sg.name });
+  breadcrumbItems.push({ '@type': 'ListItem', position: breadcrumbItems.length + 1, name: product.name });
+  const breadcrumbSchema = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: breadcrumbItems };
+
+  // Remove any existing schema scripts from previous navigation, then inject fresh ones
+  document.querySelectorAll('script[data-seo-schema]').forEach(s => s.remove());
+  [productSchema, breadcrumbSchema].forEach(schema => {
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.setAttribute('data-seo-schema', '1');
+    s.textContent = JSON.stringify(schema);
+    document.head.appendChild(s);
+  });
+  // === END SEO + SCHEMA ===
+
+  // Breadcrumb UI
   if (group) {
     const bcGroup = document.getElementById('bc-group');
     const bcSub = document.getElementById('bc-sub');
