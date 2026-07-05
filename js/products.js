@@ -14,10 +14,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadProductsPage(slug) {
   try {
     let group;
-    if (slug === 'wholesale') {
-      group = { id: 'wholesale', name: 'Wholesale', slug: 'wholesale', description: 'Bulk orders and wholesale pricing.', hero_image_url: '' };
-    } else {
+    let isWholesalePage = false;
+    
+    try {
       group = await fetchGroup(slug);
+    } catch (e) {
+      if (slug === 'wholesale') {
+        group = { id: 'wholesale', name: 'Wholesale', slug: 'wholesale', description: 'Bulk orders and wholesale pricing.', hero_image_url: '' };
+      } else {
+        throw e; // Reraise if not wholesale
+      }
+    }
+
+    if (slug === 'wholesale' || group.name.toLowerCase() === 'wholesale') {
+      isWholesalePage = true;
     }
     
     renderCategoryHero(group);
@@ -28,11 +38,15 @@ async function loadProductsPage(slug) {
     const container = document.getElementById('subgroups-container');
     container.replaceChildren();
 
-    if (slug === 'wholesale') {
-      // Fetch all wholesale products
+    if (isWholesalePage) {
+      // Fetch all wholesale products and any products explicitly assigned to this group
       const sb = getSupabase();
       const { data: products } = await sb.from('products').select('*').order('sort_order');
-      const wholesaleProducts = products.filter(p => p.wholesale_options && p.wholesale_options.length > 0);
+      
+      const wholesaleProducts = products.filter(p => 
+        (p.wholesale_options && p.wholesale_options.length > 0) || 
+        p.group_id === group.id
+      );
       
       const mockSubgroup = { slug: group.slug, name: group.name, description: group.description };
       const section = buildSubgroupSection(mockSubgroup, wholesaleProducts, group.name, 0);

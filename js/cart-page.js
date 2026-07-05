@@ -70,7 +70,7 @@ function buildCartRow(item) {
 
   const sub = document.createElement('div');
   sub.className = 'cart-item__sub';
-  const subParts = [item.subgroupName, item.strainType].filter(Boolean);
+  const subParts = [item.subgroupName, item.strainType, item.optionLabel].filter(Boolean);
   sub.textContent = subParts.join(' · ');
   info.appendChild(sub);
 
