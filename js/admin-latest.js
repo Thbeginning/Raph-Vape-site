@@ -1170,8 +1170,14 @@ async function saveProduct() {
   } catch (err) {
     console.error('saveProduct unexpected error:', err);
     const msg = err?.message || (typeof err === 'string' ? err : 'Unknown error');
+    alert("JAVASCRIPT ERROR: " + msg);
     showToast('Unexpected error: ' + msg.substring(0, 100), 'error');
-    btn.disabled = false; btn.textContent = 'Save Product';
+  } finally {
+    const btn = document.getElementById('pf-submit');
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Save Product';
+    }
   }
 }
 
