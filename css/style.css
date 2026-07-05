@@ -787,6 +787,18 @@ ul, ol { list-style: none; }
 }
 .rail-track::-webkit-scrollbar { display: none; }
 
+/* Wholesale Rotation Animation */
+.rotate-anim {
+  animation: professionalRotate 15s linear infinite;
+  transform-origin: center center;
+  object-fit: contain; /* Ensure it fits nicely while rotating */
+}
+
+@keyframes professionalRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Group Card */
 .group-card {
   flex: 0 0 350px;

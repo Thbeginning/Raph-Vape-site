@@ -143,6 +143,14 @@ async function loadGroupsRail() {
       return;
     }
 
+    groups.push({
+      slug: 'wholesale',
+      name: 'Wholesale',
+      tagline: 'DIRECT INQUIRIES',
+      description: 'Partner with us. Experience the gold standard of urban luxury in person.',
+      hero_image_url: 'wholesale image.jpeg'
+    });
+
     groups.forEach(group => {
       const card = buildGroupCard(group);
       rail.appendChild(card);
@@ -185,6 +193,9 @@ function buildGroupCard(group) {
     img.src = group.hero_image_url;
     img.alt = group.name;
     img.loading = 'lazy';
+    if (group.slug === 'wholesale') {
+      img.classList.add('rotate-anim');
+    }
     mediaWrap.appendChild(img);
   } else {
     // Fallback SVG placeholder
