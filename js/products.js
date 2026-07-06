@@ -19,11 +19,7 @@ async function loadProductsPage(slug) {
     try {
       group = await fetchGroup(slug);
     } catch (e) {
-      if (slug === 'wholesale') {
-        group = { id: 'wholesale', name: 'Wholesale', slug: 'wholesale', description: 'Bulk orders and wholesale pricing.', hero_image_url: '' };
-      } else {
-        throw e; // Reraise if not wholesale
-      }
+      throw e;
     }
 
     if (slug === 'wholesale' || group.name.toLowerCase() === 'wholesale') {
