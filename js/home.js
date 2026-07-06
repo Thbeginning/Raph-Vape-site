@@ -143,7 +143,13 @@ async function loadGroupsRail() {
       return;
     }
 
-    // Removed hardcoded wholesale group. The admin dashboard now manages the wholesale group directly in the database.
+    groups.push({
+      slug: 'wholesale',
+      name: 'Wholesale',
+      tagline: 'DIRECT INQUIRIES',
+      description: 'Partner with us. Experience the gold standard of urban luxury in person.',
+      hero_image_url: 'wholesale image.jpeg'
+    });
 
     groups.forEach(group => {
       const card = buildGroupCard(group);
