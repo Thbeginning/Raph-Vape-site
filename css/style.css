@@ -2234,6 +2234,46 @@ footer {
   }
 }
 
+/* =============================================
+   POTATO WIDGET
+   ============================================= */
+.potato-widget {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9999;
+  width: 60px;
+  height: 60px;
+  background-color: #4B8BF5;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.potato-widget:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+.potato-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #F15F22;
+  color: #FFF;
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000;
+}
 /* =========================================
    FIND YOUR STRAIN CTA & QUIZ
    ========================================= */
